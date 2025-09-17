@@ -1,336 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Yuxin Zhao's Academic Homepage">
-    <title>Yuxin Zhao - Academic Homepage</title>
-    <style>
-        body {
-            font-family: 'Lato', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            background-color: #f5f5f5;
-            color: #4f4f4f;
-            transition: background-color 1s ease-in-out, color 1s ease-in-out;
-            opacity: 0;
-            animation: pageFadeIn 1.5s ease-in-out forwards;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Yuxin Zhao — Academic Homepage" />
+  <title>Yuxin Zhao — Academic Homepage</title>
+  <style>
+    :root{
+      --ink:#33383a; --muted:#6f7579; --leaf:#7aa784; --leaf-weak:#dce8d6; --paper:#ffffff; --shadow:0 10px 28px rgba(0,0,0,.08);
+    }
+    html,body{height:100%;}
+    body{margin:0; font-family:"Lato", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; color:var(--ink); background:#f6f7f6; line-height:1.7; letter-spacing:.2px; opacity:0; animation:pageFadeIn 1.1s ease-out forwards; position:relative; min-height:100vh;}
+    @keyframes pageFadeIn{from{opacity:0}to{opacity:1}}
 
-        @keyframes pageFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    /* Background: wider crop + gentle parallax-like drift */
+    body::before{content:""; position:fixed; inset:0; z-index:-2; background-image:url('Dwelling%20by%20the%20West%20Lake.jpg?raw=true'); background-size:120% 120%; background-position:center; background-repeat:no-repeat; filter:blur(5px) saturate(1.05); transform:scale(1.06); animation:bgDrift 36s ease-in-out infinite alternate;}
+    @keyframes bgDrift{0%{transform:scale(1.06) translate(-1.5%, -1.2%)} 100%{transform:scale(1.13) translate(1.5%, 1.2%)}}
+    body::after{content:""; position:fixed; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.88));}
 
-        /* Sidebar styling */
-        .sidebar {
-            background-color: #d2e4c4;
-            width: 30%; /* Enlarged width for better visual proportion */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    /* Layout proportions (more harmonious) */
+    .shell{display:flex; min-height:100vh;}
+    .sidebar{width:26%; min-width:260px; max-width:360px; background:var(--leaf-weak); padding:40px 30px; box-shadow:2px 0 18px rgba(0,0,0,.06); display:flex; flex-direction:column; align-items:center; text-align:center;}
+    .avatar{width:192px; height:192px; border-radius:50%; object-fit:cover; box-shadow:var(--shadow)}
+    .name{margin:16px 0 2px; font:700 28px/1.2 Georgia, "Times New Roman", serif; letter-spacing:.3px}
+    .affil{margin:0; color:var(--muted); font-weight:600}
+    nav{margin-top:30px; width:100%}
+    nav a{display:block; padding:10px 0; font-size:17px; color:var(--ink); text-decoration:none; transition:color .25s ease}
+    nav a:hover{color:var(--leaf)}
 
-        .sidebar img {
-            border-radius: 50%;
-            width: 200px; /* Increased image size */
-            height: 200px;
-            object-fit: cover;
-        }
+    .content-wrap{flex:1; padding:28px; display:flex;}
+    .content{flex:1; max-width:1180px; width:100%; margin:0 auto;}
 
-        .sidebar h1 {
-            margin-top: 20px;
-            font-size: 28px; /* Enlarged font for name */
-            color: #4f4f4f;
-            font-family: 'Georgia', serif;
-            font-weight: bold;
-        }
+    section.card{display:none; background:var(--paper); border-radius:16px; box-shadow:var(--shadow); padding:36px;}
+    section.card.active{display:block}
 
-        .sidebar p {
-            color: #4f4f4f;
-            font-size: 18px;
-            font-weight: bold;
-        }
+    h2{font:700 26px/1.2 Georgia, "Times New Roman", serif; color:var(--leaf); letter-spacing:.2px; margin:0 0 18px; border-bottom:2px solid #cfd8cf; padding-bottom:10px}
+    h3{font:700 20px/1.3 Georgia, "Times New Roman", serif; color:#34495e; margin:22px 0 8px}
+    p, li{font-size:17.5px}
 
-        nav {
-            margin-top: 40px;
-            width: 100%;
-        }
+    ul.clean{list-style:none; padding:0; margin:0}
+    ul.clean li{margin:10px 0}
 
-        nav a {
-            display: block;
-            padding: 12px 0;
-            font-size: 18px; /* Increased font size */
-            font-family: 'Arial', sans-serif;
-            text-decoration: none;
-            color: #4f4f4f;
-            transition: color 0.5s ease-in-out;
-        }
+    /* Film Notes */
+    .film-notes{max-height:460px; overflow:auto; padding-right:8px; margin-top:14px}
+    .film-table{width:100%; border-collapse:collapse}
+    .film-table td{vertical-align:top; padding:14px 12px; border-bottom:1px solid #e7eee6}
+    .film-table img{width:118px; border-radius:10px; box-shadow:var(--shadow)}
+    .film-table p{font-size:16px; color:#2c3e50; margin:6px 0}
 
-        nav a:hover {
-            color: #8fb08b;
-        }
+    footer{position:fixed; bottom:0; left:0; right:0; background:var(--leaf-weak); color:var(--ink); border-top:3px solid #b0c5a1; text-align:center; font-size:11px; padding:6px}
 
-        /* Main content styling */
-        .content-container {
-            flex: 1;
-            height: 100vh;
-            overflow-y: hidden;
-            position: relative;
-        }
-
-        .content {
-            width: calc(100% - 30px); /* Adjust for larger sidebar */
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 40px;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .content.active {
-            display: block;
-        }
-
-        h2 {
-            color: #8fb08b;
-            border-bottom: 2px solid #bdc3c7;
-            padding-bottom: 10px;
-            font-family: 'Georgia', serif;
-        }
-
-        h3 {
-            font-size: 20px;
-            font-family: 'Arial', sans-serif;
-            color: #34495e;
-        }
-
-        p, ul {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        ul li {
-            margin-bottom: 10px;
-        }
-
-        strong {
-            font-weight: bold;
-        }
-
-        footer {
-            background-color: #d2e4c4;
-            color: #4f4f4f;
-            text-align: center;
-            padding: 5px;
-            border-top: 3px solid #b0c5a1;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            font-size: 10px;
-        }
-
-        /* Film Notes table with scrolling */
-        .film-notes-container {
-            max-height: 400px;
-            overflow-y: scroll;
-            margin-top: 20px;
-            padding-right: 20px;
-        }
-
-        .film-notes-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .film-notes-table td {
-            padding: 15px;
-            vertical-align: top;
-            border-bottom: 2px solid #bdc3c7;
-        }
-
-        .film-notes-table td img {
-            width: 120px;
-            border-radius: 10px;
-        }
-
-        .film-notes-table td p {
-            color: #2c3e50;
-            font-family: 'Arial', sans-serif;
-            font-size: 16px;
-        }
-
-        /* Dreamlike background animation */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://github.com/zyx040301/zyx040301.github.io/blob/main/Dwelling%20by%20the%20West%20Lake.jpg?raw=true');
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px);
-            z-index: -1;
-            opacity: 0.6;
-            animation: slowMove 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes slowMove {
-            from { transform: translateY(-10px); }
-            to { transform: translateY(10px); }
-        }
-    </style>
+    @media (max-width: 980px){.shell{flex-direction:column}.sidebar{width:100%; max-width:none}}
+  </style>
 </head>
 <body>
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <img class="avatar" src="avatar.png?raw=true" alt="Yuxin Zhao" />
+      <div class="name">Yuxin Zhao</div>
+      <p class="affil">Qian Class Student at NUDT</p>
+      <nav>
+        <a href="#" onclick="show('about')">About Me</a>
+        <a href="#" onclick="show('news')">News</a>
+        <a href="#" onclick="show('pubs')">Publications</a>
+        <a href="#" onclick="show('hobbies')">Hobbies</a>
+        <a href="#" onclick="show('contact')">Contact</a>
+      </nav>
+    </aside>
 
-    <!-- Sidebar Section -->
-    <div class="sidebar">
-        <img src="https://github.com/zyx040301/zyx040301.github.io/blob/main/avatar.png?raw=true" alt="Yuxin Zhao">
-        <h1>Yuxin Zhao</h1>
-        <p>Qian Class Student at NUDT</p>
-        <nav>
-            <a href="#" onclick="showSection('about')">About Me</a>
-            <a href="#" onclick="showSection('news')">News</a>
-            <a href="#" onclick="showSection('publications')">Publications</a>
-            <a href="#" onclick="showSection('hobbies')">Hobbies</a>
-            <a href="#" onclick="showSection('contact')">Contact</a>
-        </nav>
-    </div>
+    <!-- Main Content -->
+    <main class="content-wrap">
+      <div class="content">
 
-    <!-- Main Content Container -->
-    <div class="content-container">
-        <div class="content active" id="about">
-            <h2>About Me</h2>
-            <p><strong>I am currently an undergraduate student</strong> at the National University of Defense Technology (NUDT), majoring in Information Engineering in the Qian Class. I graduated from the High School Affiliated to Nanjing Normal University. My academic interests lie in the fields of <strong>machine learning, remote sensing image processing,</strong> and <strong>multimodal AIGC</strong>.</p>
-            <p>My research focuses on cutting-edge technologies such as diffusion models and their applications in image translation. Recently, I published a paper titled <strong>Optical Infrared Image Translation Based on Diffusion Models</strong>, which was accepted at the first Conference on Space Information Technology and Industry Development and recommended for publication in the SPIE proceedings (EI-indexed).</p>
-            <p>Beyond research, I actively participate in national and international academic competitions and projects, further honing my problem-solving skills and ability to innovate in complex fields.</p>
-        </div>
+        <!-- About -->
+        <section id="about" class="card active">
+          <h2>About Me</h2>
+          <p><strong>I am currently an undergraduate student</strong> at the National University of Defense Technology (NUDT), majoring in Information Engineering in the Qian Class. I graduated from the High School Affiliated to Nanjing Normal University. My academic interests lie in <strong>machine learning</strong>, <strong>remote sensing image processing</strong>, and <strong>multimodal AIGC</strong>. Beyond research, I enjoy film studies, swimming, and exploring classical & contemporary cinema aesthetics.</p>
+          <h3>Research Interests</h3>
+          <ul class="clean">
+            <li><strong>Image Generation</strong>: diffusion- and transformer-based generative models for controllable, high‑fidelity synthesis and cross‑domain translation.</li>
+            <li><strong>Multimodal Learning</strong>: aligning text–image–sensor modalities (e.g., optical ↔ radar, text ↔ image) for translation, retrieval, and semantic grounding.</li>
+          </ul>
+        </section>
 
-        <div class="content" id="news">
-            <h2>News</h2>
-            <ul>
-                <li>[2024] My paper <em>Optical Infrared Image Translation Based on Diffusion Models</em> was accepted at the Space Information Technology and Industry Development Conference.</li>
-                <li>[2024] I led a National Innovation Project on intelligent radar identification using spiking neural networks.</li>
-                <li>[2023] Achieved Second Prize in the National Undergraduate Electronic Design Contest.</li>
-            </ul>
-        </div>
+        <!-- News -->
+        <section id="news" class="card">
+          <h2>News</h2>
+          <ul class="clean">
+            <li><strong>2025</strong> — <em>SAIG: Semantic‑Aware ISAR Generation via Component‑Level Semantic Segmentation</em> is accepted in <em>IEEE Geoscience and Remote Sensing Letters (GRSL)</em>. <a href="https://doi.org/10.1109/LGRS.2025.3563712" target="_blank" rel="noopener">DOI link</a>.</li>
+            <li>
+              <strong>2024</strong> — <em>Optical‑infrared image translation based on diffusion models</em> appears in <em>Proceedings of SPIE</em>, Conference on Spectral Technology and Applications (CSTA 2024). <a href="http://dx.doi.org/10.1117/12.3036995" target="_blank" rel="noopener">DOI: 10.1117/12.3036995</a>.
+            </li>
+          </ul>
+        </section>
 
-        <div class="content" id="publications">
-            <h2>Publications</h2>
-            <ul>
-                <li><strong>Optical Infrared Image Translation Based on Diffusion Models</strong> - Presented at the Space Information Technology and Industry Development Conference (2024).</li>
-                <li><strong>Intelligent Radar Identification with Spiking Neural Networks</strong> - Under review for future publication.</li>
-            </ul>
-        </div>
+        <!-- Publications -->
+        <section id="pubs" class="card">
+          <h2>Publications</h2>
+          <ol>
+            <li>
+              <strong>Yuxin Zhao</strong>, Huaizhang Liao, Derong Kong, Zhixiong Yang, Jingyuan Xia. "<em>SAIG: Semantic‑Aware ISAR Generation via Component‑Level Semantic Segmentation</em>." <em>IEEE Geoscience and Remote Sensing Letters</em>, 22:1–5, 2025. <a href="https://doi.org/10.1109/LGRS.2025.3563712" target="_blank" rel="noopener">https://doi.org/10.1109/LGRS.2025.3563712</a>
+            </li>
+            <li>
+              <strong>Yuxin Zhao</strong>, Zihao Gao, Huaizhang Liao, Tao Han, Jingyuan Xia. "<em>Optical‑infrared image translation based on diffusion models</em>." <em>Proceedings of SPIE</em>, Vol. 13283, Conference on Spectral Technology and Applications (CSTA 2024), paper 1328330, Dalian, China. Author affiliations available via SPIE page. <a href="http://dx.doi.org/10.1117/12.3036995" target="_blank" rel="noopener">http://dx.doi.org/10.1117/12.3036995</a>
+            </li>
+          </ol>
+        </section>
 
-        <div class="content" id="hobbies">
-            <h2>Hobbies</h2>
-            <p>In addition to research, I have a deep passion for sports and the arts. I enjoy swimming, roller skating, and playing golf. I am also proficient in various musical instruments, including the piano and the ocarina. I love watching films and have a growing interest in film theory and analysis.</p>
+        <!-- Hobbies -->
+        <section id="hobbies" class="card">
+          <h2>Hobbies</h2>
+          <p>I love research and cinema. Outside the lab, I swim, roller‑skate, and play piano/ocarina. I also keep notes on films and film theory.</p>
+          <h3>Film Notes</h3>
+          <p style="font-size:13px;color:gray;margin-top:-10px;margin-bottom:10px;">图片来源：<a href="https://www.douban.com/" target="_blank" style="color:gray;text-decoration:underline;">豆瓣电影（https://www.douban.com/）</a></p>
+          <div class="film-notes">
+            <table class="film-table">
+              <tr>
+                <td><img src="film_notes/一代宗师.jpg?raw=true" alt="一代宗师海报"></td>
+                <td>
+                  <p><strong>一代宗师</strong></p>
+                  <p>以武学身法折射传统的“后脚跟”，在光影里讨论现代性与根性。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/情书.jpg?raw=true" alt="情书海报"></td>
+                <td>
+                  <p><strong>情书</strong></p>
+                  <p>镜像自我的回声室，记忆把缺席的人塑成了爱的投影。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/一一.jpg?raw=true" alt="一一海报"></td>
+                <td>
+                  <p><strong>一一</strong></p>
+                  <p>我们始终只能看见生活的一半，另一半隐藏在沉默与日常里。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/悲情城市.jpg?raw=true" alt="悲情城市海报"></td>
+                <td>
+                  <p><strong>悲情城市</strong></p>
+                  <p>时代的噪音吞没个人命运，静观镜头让历史的疼痛慢慢显形。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/蓝白红三部曲之蓝.jpg?raw=true" alt="蓝白红之蓝海报"></td>
+                <td>
+                  <p><strong>蓝白红三部曲之蓝</strong></p>
+                  <p>失去后的自由像一池冷水，情感在克制里回温成新的自我。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/游园惊梦.jpg?raw=true" alt="游园惊梦海报"></td>
+                <td>
+                  <p><strong>游园惊梦</strong></p>
+                  <p>欲与梦互为镜像，越追索越看见情感的空无与执念。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/飞向太空.jpg?raw=true" alt="飞向太空海报"></td>
+                <td>
+                  <p><strong>飞向太空</strong></p>
+                  <p>记忆以人的模样返回，科幻折叠成一场关于失而复得的伦理试验。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/三峡好人.jpg?raw=true" alt="三峡好人海报"></td>
+                <td>
+                  <p><strong>三峡好人</strong></p>
+                  <p>巨变背景里的人间小事，拆迁声里漂浮着最轻也最重的情感。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/春江水暖.jpg?raw=true" alt="春江水暖海报"></td>
+                <td>
+                  <p><strong>春江水暖</strong></p>
+                  <p>河道的潮汐像家族的呼吸，静水深流里藏着代际的疼与爱。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/魔女宅急便.jpg?raw=true" alt="魔女宅急便海报"></td>
+                <td>
+                  <p><strong>魔女宅急便</strong></p>
+                  <p>成长是学会把平凡做到可靠，飞行不过是找到自己的风。</p>
+                </td>
+              </tr>
+              <tr>
+                <td><img src="film_notes/星际穿越.jpg?raw=true" alt="星际穿越海报"></td>
+                <td>
+                  <p><strong>星际穿越</strong></p>
+                  <p>时间在亲情面前弯曲，宇宙尺度的宏大最终指向一间房的灯光。</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </section>
 
-            <h3>Film Notes:</h3>
-            <div class="film-notes-container">
-                <table class="film-notes-table">
-                    <tr>
-                        <td><img src="https://github.com/zyx040301/zyx040301.github.io/blob/main/film_notes/%E4%B8%80%E4%BB%A3%E5%AE%97%E5%B8%88.jpg?raw=true" alt="一代宗师海报"></td>
-                        <td>
-                            <p><strong>一代宗师</strong></p>
-			    <p>
-    电影《一代宗师》不仅是一部展现武术传承的功夫片，更是一部深刻探索文化自觉和身体语言的电影。在数字时代已然到来的背景下，导演王家卫选择了胶片拍摄，以传统的媒介方式唤起对过去的追忆和敬畏。这种胶片的质感，在电影中充满了对传统美学的礼赞，同时隐隐表达出数码转型所带来的文化和技术转变。导演通过影像语言的精妙构成，展现了对胶片电影消逝的自觉，传递出一种文化断裂与现代焦虑感。
-</p>
+        <!-- Contact -->
+        <section id="contact" class="card">
+          <h2>Contact</h2>
+          <p>Email: <a href="mailto:yuxin_zhao04@163.com"><strong>yuxin_zhao04@163.com</strong></a></p>
+        </section>
 
-			    <p>
-    然而，真正打动观众的，不仅是电影的媒介选择，更在于其深刻的文化自觉。王家卫在拍摄这部电影时，经过长达八九年的准备，其中要求演员花费三年时间习武。这个习武的过程不仅是为了角色的塑造，更是一种身体语言的改造。演员的身体在银幕上所表现出的打斗姿态、举手投足，皆在传递一种深刻的传统文化内涵。尤其是宫二这一女性复仇者形象，她的每一个动作都渗透着传统文化的坚韧与深沉，仿佛在述说着她那无法逃脱的命运。她的复仇之路，既是个人的悲剧，也是一种文化命运的隐喻。
-</p>
+      </div>
+    </main>
+  </div>
 
-			   <p>
-    影片中大量的脚步特写和打斗场景通过身体语言的表演，传递了中国传统文化的“后脚跟性”，即身体的重心稳固、下沉。台湾学者张小虹曾提到，前现代与现代的身体语言可以通过重心的变化来区分：现代人重心前倾，依赖前脚掌，而传统文化则重心后移，立足于后脚跟。《一代宗师》通过武术动作的展现，细腻地表达了这一“后脚跟性”的文化内涵。武术的力量不仅在于表面的打斗，更在于内心的沉稳、重心的扎根，这是中国传统文化的根本所在。
-</p>
+  <footer>&copy; 2025 Yuxin Zhao. All Rights Reserved.</footer>
 
-			   <p>
-    因此，《一代宗师》不仅仅是一部关于功夫的电影，更是一部通过身体和武术语言探索中国传统文化的当代寓言。影片中所展现的武林，不仅是个人技艺的角斗场，更是文化传承与现代变迁的缩影。王家卫通过对身体语言的精心构造，借助影像语言，将传统文化的厚重与沉稳融入到每一帧画面中。这不仅是对胶片电影的挽歌，更是对文化身份和自我追寻的深刻反思。
-</p>
-
-			   <p>
-    电影中，宫二的复仇与孤独，正如王家卫对现代文化断裂的追问一样，都是一种关于自我、传统与现代的深刻思考。在这部电影中，我们看到了中国传统文化在现代社会中如何艰难寻求立足之地的过程，这不仅是一个人、一代人的故事，更是一种文化命运的沉浮。
-</p>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="https://github.com/zyx040301/zyx040301.github.io/blob/main/film_notes/%E6%83%85%E4%B9%A6.jpg?raw=true" alt="情书海报"></td>
-                        <td>
-                            <p><strong>情书</strong></p>
-                            <p>在精神分析的视角下，这部影片揭示了拉康镜像阶段的内涵。博子通过与藤井树（女）的通信，仿佛看到了自己情感中的“镜像”，无法区分真实的自我与幻想中的自我。她的爱不仅仅是对藤井树（男）的怀念，更是对自己理想化的爱的执迷。正如影片中的冰封蜻蜓，爱情在看似温暖的回忆中，实则脆弱如影。</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="https://github.com/zyx040301/zyx040301.github.io/blob/main/film_notes/%E4%B8%80%E4%B8%80.jpg?raw=true" alt="一一海报"></td>
-                        <td>
-                            <p><strong>一一</strong></p>
-			    <p>
-    杨德昌导演的《一一》是一部在日常生活中寻找哲理的电影，它以细腻的镜头语言和隐秘的结构揭示了人类关系的复杂与脆弱。在这部将近三小时的影片中，杨德昌通过极其生活化的情节描绘出一个家庭的故事，却又超越了家庭的范畴，展现了人与社会、与自我、与时间的张力。
-</p>
-
-			   <p>
-    影片通过不同角色的视角，探索了人际关系中的陌生与熟悉。婆婆的成为植物人，是连接所有人物故事的核心，就像树干支撑着枝叶，而这一事件也象征了家庭中传统权威的沉默消失。每个角色都在婆婆的沉睡中，慢慢失去了生活的方向。女主人敏敏逃入修行，NJ与初恋的重逢又最终无果，孩子们在混乱的家庭中经历各自的成长与迷茫。人与人之间的交流几乎陷入沉默，只有通过婆婆的床边独白，这个家庭的隐秘矛盾才得以一丝显露。
-</p>
-
-			    <p>
-    影片看似无情绪波动，却在每个细节中积蓄了情感的力量，犹如一幅精致的中国水墨画，淡而不失深意。杨德昌用近乎沉默的方式揭示了现代生活中的孤独与无力感。婚姻中的貌合神离，亲子关系中的疏离，以及对往昔的徒劳追忆，无不传达出一种对生命无常的深刻理解。
-</p>
-
-			    <p>
-    《一一》所表现的，不仅是家庭的琐碎，更是个人与世界对抗的隐痛。电影以孩子洋洋的一封信作为终结，点出了影片的哲学核心——我们总能看到生活的一半，却永远无法窥见另一半的真相。成长是一场孤独的旅程，人生是一个无法复原的谜。
-</p>
-
-                        </td>
-                    </tr>
-                    <!-- Add more films in similar structure -->
-                </table>
-            </div>
-        </div>
-
-        <div class="content" id="contact">
-            <h2>Contact</h2>
-            <p>Email: <strong>yuxin_zhao04@163.com</strong></p>
-            <form>
-                <input type="text" name="name" placeholder="Your Name" required><br><br>
-                <input type="email" name="email" placeholder="Your Email" required><br><br>
-                <textarea name="message" rows="5" placeholder="Your Message" required></textarea><br><br>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Footer Section -->
-    <footer>
-        <p>&copy; 2024 Yuxin Zhao. All Rights Reserved.</p>
-    </footer>
-
-    <script>
-        // Function to show only the clicked section without scrolling
-        function showSection(sectionId) {
-            document.querySelectorAll('.content').forEach(function(section) {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-        }
-    </script>
-
+  <script>
+    function show(id){ document.querySelectorAll('section.card').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+  </script>
 </body>
 </html>

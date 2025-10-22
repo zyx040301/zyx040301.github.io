@@ -29,7 +29,7 @@
     nav a:hover{color:var(--leaf)}
 
     .content-wrap{flex:1; padding:28px; display:flex;}
-    .content{flex:1; max-width:1180px; width:100%; margin:0 auto;}
+    .content{flex:1; max-width:1080px; width:100%; margin:0 auto;} /* MODIFIED: Was 1180px, reduced for comfort */
 
     section.card{display:none; background:var(--paper); border-radius:16px; box-shadow:var(--shadow); padding:36px;}
     section.card.active{display:block}
@@ -41,16 +41,208 @@
     ul.clean{list-style:none; padding:0; margin:0}
     ul.clean li{margin:10px 0}
 
-    /* Film Notes */
+    /* --- News Section --- */
+    .news-item {
+        font-size: 17.5px;
+        margin-bottom: 15px;
+    }
+    .news-item strong {
+        color: var(--leaf);
+        font-weight: 700;
+        margin-right: 8px;
+    }
+    
+    /* --- Publications Section --- */
+    .publication-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 28px;
+        padding: 25px 0;
+        border-bottom: 1px solid #e7eee6;
+    }
+    .publication-row:last-child {
+        border-bottom: none;
+        padding-bottom: 10px;
+    }
+    .publication-image {
+        flex: 0 0 38.2%; /* MODIFIED: Golden Ratio (was 40%) */
+        max-width: 420px;
+        position: relative;
+        cursor: zoom-in;
+        overflow: hidden;
+        border-radius: 10px; /* 保持风格统一 */
+    }
+    .publication-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+    }
+    .view-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+        font-weight: 600;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        border-radius: 10px;
+    }
+    .publication-image:hover img {
+        transform: scale(1.03); /* 细微缩放 */
+    }
+    .publication-image:hover .view-overlay {
+        opacity: 1;
+    }
+    .publication-text {
+        flex: 1; /* Will take remaining 61.8% */
+    }
+    .papertitle {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink);
+        display: block;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+    .publication-text .authors {
+        font-size: 16px;
+        margin: 5px 0;
+        line-height: 1.6;
+    }
+    .publication-text .venue {
+        font-size: 16px;
+        font-style: italic;
+        color: var(--muted);
+    }
+    .publication-text .links {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .publication-text .links a {
+        color: var(--leaf);
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+    .publication-text .links a:hover {
+        text-decoration: underline;
+    }
+    .publication-text p {
+        font-size: 16px;
+        color: var(--muted);
+        margin: 12px 0 0;
+        line-height: 1.6;
+    }
+
+    /* --- Lightbox Styles --- */
+    #lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.88);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: zoom-out;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    #lightbox.active {
+        display: flex;
+    }
+    #lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+        box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        border-radius: 4px;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+    }
+
+    /* Film Notes (REFACTORED from <table> to <div> for ratio control) */
     .film-notes{max-height:460px; overflow:auto; padding-right:8px; margin-top:14px}
-    .film-table{width:100%; border-collapse:collapse}
-    .film-table td{vertical-align:top; padding:14px 12px; border-bottom:1px solid #e7eee6}
-    .film-table img{width:118px; border-radius:10px; box-shadow:var(--shadow)}
-    .film-table p{font-size:16px; color:#2c3e50; margin:6px 0}
+    .film-list{width:100%;}
+    .film-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        padding: 14px 6px;
+        border-bottom: 1px solid #e7eee6;
+    }
+    .film-row:last-child { border-bottom: none; }
+    .film-poster {
+        flex: 0 0 38.2%;
+        max-width: 180px; /* MODIFIED: Increased size (was 130px) */
+    }
+    .film-poster img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        display: block;
+    }
+    .film-desc {
+        flex: 1; /* Takes remaining 61.8% */
+    }
+    .film-desc p {
+        font-size: 16px; 
+        color: #2c3e50; 
+        margin: 6px 0;
+    }
+    .film-desc p:first-of-type {
+         margin-top: 0; 
+    }
 
     footer{position:fixed; bottom:0; left:0; right:0; background:var(--leaf-weak); color:var(--ink); border-top:3px solid #b0c5a1; text-align:center; font-size:11px; padding:6px}
 
-    @media (max-width: 980px){.shell{flex-direction:column}.sidebar{width:100%; max-width:none}}
+    @media (max-width: 980px){
+      .shell{flex-direction:column}
+      .sidebar{width:100%; max-width:none; padding: 25px 20px;} /* MODIFIED: Added padding */
+      
+      .content-wrap { padding: 15px; } /* MODIFIED: Added */
+      section.card { padding: 24px; } /* MODIFIED: Added */
+      
+      /* MODIFIED: Typography */
+      h2 { font-size: 24px; } 
+      p, li { font-size: 17px; }
+      .papertitle { font-size: 19px; } 
+      
+      /* 响应式排版 */
+      .publication-row {
+          flex-direction: column;
+          gap: 20px;
+      }
+      .publication-image {
+          max-width: 100%; /* 在移动端占满宽度 */
+          flex-basis: auto; /* Reset flex-basis on mobile */
+      }
+      
+      /* MODIFIED: Film Notes Mobile */
+      .film-row { gap: 16px; }
+      .film-poster {
+          max-width: 110px; /* Adjust film poster size on mobile */
+      }
+      
+      /* MODIFIED: Footer Fix */
+      footer {
+          position: relative; 
+          margin-top: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -76,124 +268,249 @@
         <!-- About -->
         <section id="about" class="card active">
           <h2>About Me</h2>
-          <p><strong>I am currently an undergraduate student</strong> at the National University of Defense Technology (NUDT), majoring in Information Engineering in the Qian Class. I graduated from the High School Affiliated to Nanjing Normal University. My academic interests lie in <strong>machine learning</strong>, <strong>remote sensing image processing</strong>, and <strong>multimodal AIGC</strong>. Beyond research, I enjoy film studies, swimming, and exploring classical & contemporary cinema aesthetics.</p>
+          <p><strong>I am currently an undergraduate student</strong> at the NUDT, majoring in Information Engineering in the Qian Class. I graduated from the High School Affiliated to Nanjing Normal University. My research focuses on the intersection of <b>machine learning</b> and <b>remote sensing image processing</b>, particularly in developing generative models for <b>cross-modal AIGC tasks</b>. Beyond research, I enjoy film studies, swimming, and exploring classical & contemporary cinema aesthetics.</p>
           <h3>Research Interests</h3>
           <ul class="clean">
-            <li><strong>Image Generation</strong>: diffusion- and transformer-based generative models for controllable, high‑fidelity synthesis and cross‑domain translation.</li>
-            <li><strong>Multimodal Learning</strong>: aligning text–image–sensor modalities (e.g., optical ↔ radar, text ↔ image) for translation, retrieval, and semantic grounding.</li>
+            <li><strong>Generative Models for Image Translation</strong>: Developing and applying generative models (e.g., Diffusion, GANs) for high-fidelity, cross-domain image translation (e.g., Optical-to-ISAR).</li>
+            <li><strong>Semantic-Aware Remote Sensing</strong>: Utilizing semantic information (like segmentation) to guide and improve the alignment and translation between different sensor modalities in remote sensing.</li>
           </ul>
         </section>
 
-        <!-- News -->
+        <!-- News (Reformatted) -->
         <section id="news" class="card">
           <h2>News</h2>
-          <ul class="clean">
-            <li><strong>2025</strong> — <em>SAIG: Semantic‑Aware ISAR Generation via Component‑Level Semantic Segmentation</em> is accepted in <em>IEEE Geoscience and Remote Sensing Letters (GRSL)</em>. <a href="https://doi.org/10.1109/LGRS.2025.3563712" target="_blank" rel="noopener">DOI link</a>.</li>
-            <li>
-              <strong>2024</strong> — <em>Optical‑infrared image translation based on diffusion models</em> appears in <em>Proceedings of SPIE</em>, Conference on Spectral Technology and Applications (CSTA 2024). <a href="http://dx.doi.org/10.1117/12.3036995" target="_blank" rel="noopener">DOI: 10.1117/12.3036995</a>.
-            </li>
-          </ul>
+          <div class="news-list">
+            <p class="news-item">
+              <strong>[Apr 2025]</strong> Our paper <em>SAIG: Semantic‑Aware ISAR Generation via Component‑Level Semantic Segmentation</em> was accepted by <em>IEEE Geoscience and Remote Sensing Letters (GRSL)</em>.
+            </p>
+            <p class="news-item">
+              <strong>[Jun 2024]</strong> Our paper <em>Optical‑infrared image translation based on diffusion models</em> was published in <em>Proceedings of SPIE</em> (Conference on Spectral Technology and Applications, CSTA 2024).
+            </p>
+          </div>
         </section>
 
-        <!-- Publications -->
+        <!-- Publications (Reformatted) -->
         <section id="pubs" class="card">
           <h2>Publications</h2>
-          <ol>
-            <li>
-              <strong>Yuxin Zhao</strong>, Huaizhang Liao, Derong Kong, Zhixiong Yang, Jingyuan Xia. "<em>SAIG: Semantic‑Aware ISAR Generation via Component‑Level Semantic Segmentation</em>." <em>IEEE Geoscience and Remote Sensing Letters</em>, 22:1–5, 2025. <a href="https://doi.org/10.1109/LGRS.2025.3563712" target="_blank" rel="noopener">https://doi.org/10.1109/LGRS.2025.3563712</a>
-            </li>
-            <li>
-              <strong>Yuxin Zhao</strong>, Zihao Gao, Huaizhang Liao, Tao Han, Jingyuan Xia. "<em>Optical‑infrared image translation based on diffusion models</em>." <em>Proceedings of SPIE</em>, Vol. 13283, Conference on Spectral Technology and Applications (CSTA 2024), paper 1328330, Dalian, China. Author affiliations available via SPIE page. <a href="http://dx.doi.org/10.1117/12.3036995" target="_blank" rel="noopener">http://dx.doi.org/10.1117/12.3036995</a>
-            </li>
-          </ol>
+          
+          <div class="publication-row">
+            <div class="publication-image">
+              <img src="publications/2025-GRSL-SAIG.png" alt="Preview of SAIG paper">
+              <div class="view-overlay">View</div>
+            </div>
+            <div class="publication-text">
+              <span class="papertitle">SAIG: Semantic-Aware ISAR Generation via Component-Level Semantic Segmentation</span>
+              <div class="authors">
+                <strong>Yuxin Zhao</strong>, Huaizhang Liao, Derong Kong, Zhixiong Yang, Jingyuan Xia.
+              </div>
+              <div class="venue">
+                <em>IEEE Geoscience and Remote Sensing Letters (GRSL)</em>, 2025.
+              </div>
+              <div class="links">
+                <a href="https://ieeexplore.ieee.org/document/10975048" target="_blank" rel="noopener">Paper Link</a>
+              </div>
+              <p>
+                This letter proposes SAIG, a semantic-aware framework for generating high-fidelity inverse synthetic aperture radar (ISAR) images from optical images. SAIG achieves this by learning mutual semantic segmentation maps and incorporating component-level refinement to preserve scattering characteristics.
+              </p>
+            </div>
+          </div>
+
+          <div class="publication-row">
+            <div class="publication-image">
+              <img src="publications/2024-SPIE-SIGDM.png" alt="Preview of SIGDM paper">
+              <div class="view-overlay">View</div>
+            </div>
+            <div class="publication-text">
+              <span class="papertitle">Optical-Infrared Image Translation Based on Diffusion Models</span>
+              <div class="authors">
+                <strong>Yuxin Zhao</strong>, Zihao Gao, Huaizhang Liao, Tao Han, Jingyuan Xia.
+              </div>
+              <div class="venue">
+                <em>Conference on Spectral Technology and Applications</em>, Proc. of SPIE, 2024.
+              </div>
+              <div class="links">
+                <a href="https://www.spiedigitallibrary.org/conference-proceedings-of-spie/13283/1328330/Optical-infrared-image-translation-based-on-diffusion-models/10.1117/12.3036995.short" target="_blank" rel="noopener">Paper Link</a>
+              </div>
+              <p>
+                This paper proposes a diffusion-based method (SIGDM) to translate optical images into infrared images, addressing the high cost and limitations of traditional cross-domain registration. The method uses VQ-VAE for latent space formation and a stochastic Brownian Bridge diffusion process for modal alignment.
+              </p>
+            </div>
+          </div>
+
         </section>
 
-        <!-- Hobbies -->
+        <!-- Hobbies (REFACTORED HTML) -->
         <section id="hobbies" class="card">
           <h2>Hobbies</h2>
           <p>I love research and cinema. Outside the lab, I swim, roller‑skate, and play piano/ocarina. I also keep notes on films and film theory.</p>
           <h3>Film Notes</h3>
           <p style="font-size:13px;color:gray;margin-top:-10px;margin-bottom:10px;">图片来源：<a href="https://www.douban.com/" target="_blank" style="color:gray;text-decoration:underline;">豆瓣电影（https://www.douban.com/）</a></p>
+          
           <div class="film-notes">
-            <table class="film-table">
-              <tr>
-                <td><img src="film_notes/一代宗师.jpg?raw=true" alt="一代宗师海报"></td>
-                <td>
+            <div class="film-list">
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/一代宗师.jpg?raw=true" alt="一代宗师海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>一代宗师</strong></p>
                   <p>以武学身法折射传统的“后脚跟”，在光影里讨论现代性与根性。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/情书.jpg?raw=true" alt="情书海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/情书.jpg?raw=true" alt="情书海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>情书</strong></p>
                   <p>镜像自我的回声室，记忆把缺席的人塑成了爱的投影。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/一一.jpg?raw=true" alt="一一海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/一一.jpg?raw=true" alt="一一海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>一一</strong></p>
                   <p>我们始终只能看见生活的一半，另一半隐藏在沉默与日常里。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/悲情城市.jpg?raw=true" alt="悲情城市海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/悲情城市.jpg?raw=true" alt="悲情城市海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>悲情城市</strong></p>
                   <p>时代的噪音吞没个人命运，静观镜头让历史的疼痛慢慢显形。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/蓝白红三部曲之蓝.jpg?raw=true" alt="蓝白红之蓝海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/蓝白红三部曲之蓝.jpg?raw=true" alt="蓝白红之蓝海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>蓝白红三部曲之蓝</strong></p>
                   <p>失去后的自由像一池冷水，情感在克制里回温成新的自我。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/游园惊梦.jpg?raw=true" alt="游园惊梦海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/游园惊梦.jpg?raw=true" alt="游园惊梦海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>游园惊梦</strong></p>
                   <p>欲与梦互为镜像，越追索越看见情感的空无与执念。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/飞向太空.jpg?raw=true" alt="飞向太空海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/飞向太空.jpg?raw=true" alt="飞向太空海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>飞向太空</strong></p>
-                  <p>记忆以人的模样返回，科幻折叠成一场关于失而复得的伦理试验。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/三峡好人.jpg?raw=true" alt="三峡好人海报"></td>
-                <td>
+                  <p>记忆以人的模样返回，科幻折叠成一场关于失而得的伦理试验。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/三峡好人.jpg?raw=true" alt="三峡好人海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>三峡好人</strong></p>
                   <p>巨变背景里的人间小事，拆迁声里漂浮着最轻也最重的情感。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/春江水暖.jpg?raw=true" alt="春江水暖海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/春江水暖.jpg?raw=true" alt="春江水暖海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>春江水暖</strong></p>
                   <p>河道的潮汐像家族的呼吸，静水深流里藏着代际的疼与爱。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/魔女宅急便.jpg?raw=true" alt="魔女宅急便海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/魔女宅急便.jpg?raw=true" alt="魔女宅急便海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>魔女宅急便</strong></p>
                   <p>成长是学会把平凡做到可靠，飞行不过是找到自己的风。</p>
-                </td>
-              </tr>
-              <tr>
-                <td><img src="film_notes/星际穿越.jpg?raw=true" alt="星际穿越海报"></td>
-                <td>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/星际穿越.jpg?raw=true" alt="星际穿越海报">
+                </div>
+                <div class="film-desc">
                   <p><strong>星际穿越</strong></p>
                   <p>时间在亲情面前弯曲，宇宙尺度的宏大最终指向一间房的灯光。</p>
-                </td>
-              </tr>
-            </table>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/雾中风景.jpg?raw=true" alt="雾中风景海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>雾中风景</strong></p>
+                  <p>寻父的奥德赛，现实与幻想的边界消融于诗意的迷雾。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/大鱼.jpg?raw=true" alt="大鱼海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>大鱼</strong></p>
+                  <p>父亲的奇幻，瑰丽想象的现实，不朽的故事。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/大象席地而坐.jpg?raw=true" alt="大象席地而坐海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>大象席地而坐</strong></p>
+                  <p>四小时的灰暗凝视，个体困境碾压成时代注脚，虚无的彼岸。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/与玛格丽特的午后.jpg?raw=true" alt="与玛格丽特的午后海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>与玛格丽特的午后</strong></p>
+                  <p>关于阅读的忘年之交，文字成为跨越偏见的桥梁，照亮灵魂。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/沙丘2.jpg?raw=true" alt="沙丘2海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>沙丘2</strong></p>
+                  <p>宏大的视听史诗，信仰被权力异化为战争机器。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/攻壳机动队.jpg?raw=true" alt="攻壳机动队海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>攻壳机动队</strong></p>
+                  <p>赛博朋克，冰冷义体与数据洪流，何以为人的灵魂归宿。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/吴清源.jpg?raw=true" alt="吴清源海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>吴清源</strong></p>
+                  <p>黑白棋局映照百年孤独，克制与留白中，求道者的中和。</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -207,10 +524,53 @@
     </main>
   </div>
 
+  <!-- Lightbox HTML (Added) -->
+  <div id="lightbox">
+    <img src="" alt="Enlarged publication image">
+  </div>
+
   <footer>&copy; 2025 Yuxin Zhao. All Rights Reserved.</footer>
 
   <script>
+    // 原有的导航脚本
     function show(id){ document.querySelectorAll('section.card').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+    // 新增的 Lightbox 脚本
+    document.addEventListener('DOMContentLoaded', () => {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox) {
+            const lightboxImg = lightbox.querySelector('img');
+            const publicationImages = document.querySelectorAll('.publication-image');
+
+            publicationImages.forEach(imageContainer => {
+                imageContainer.addEventListener('click', () => {
+                    const originalImg = imageContainer.querySelector('img');
+                    const imgSrc = originalImg.getAttribute('src');
+                    
+                    lightboxImg.setAttribute('src', imgSrc);
+                    
+                    lightbox.classList.add('active');
+                    
+                    // 稍作延迟以触发CSS过渡
+                    setTimeout(() => {
+                        lightbox.style.opacity = '1';
+                        lightboxImg.style.transform = 'scale(1)';
+                    }, 20);
+                });
+            });
+
+            lightbox.addEventListener('click', () => {
+                lightbox.style.opacity = '0';
+                lightboxImg.style.transform = 'scale(0.8)';
+                
+                // 等待过渡动画结束后再隐藏
+                setTimeout(() => {
+                    lightbox.classList.remove('active');
+                }, 300); // 300ms 匹配 CSS 过渡时间
+            });
+        }
+    });
   </script>
 </body>
 </html>
+

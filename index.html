@@ -13,10 +13,42 @@
     body{margin:0; font-family:"Lato", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; color:var(--ink); background:#f6f7f6; line-height:1.7; letter-spacing:.2px; opacity:0; animation:pageFadeIn 1.1s ease-out forwards; position:relative; min-height:100vh;}
     @keyframes pageFadeIn{from{opacity:0}to{opacity:1}}
 
-    /* Background: wider crop + gentle parallax-like drift */
-    body::before{content:""; position:fixed; inset:0; z-index:-2; background-image:url('Dwelling%20by%20the%20West%20Lake.jpg?raw=true'); background-size:120% 120%; background-position:center; background-repeat:no-repeat; filter:blur(5px) saturate(1.05); transform:scale(1.06); animation:bgDrift 36s ease-in-out infinite alternate;}
-    @keyframes bgDrift{0%{transform:scale(1.06) translate(-1.5%, -1.2%)} 100%{transform:scale(1.13) translate(1.5%, 1.2%)}}
-    body::after{content:""; position:fixed; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.88));}
+    /* Background: MODIFIED for Aesthetic Pan */
+    body::before{
+      content:""; 
+      position:fixed; 
+      inset:0; 
+      z-index:-2; 
+      background-image:url('Dwelling%20by%20the%20West%20Lake.jpg?raw=true');
+      /* MODIFIED: 'cover' guarantees no white edges by filling the screen */
+      background-size: cover; 
+      /* MODIFIED: Start position is dead center */
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      /* MODIFIED: Adjusted speed to 60s */
+      animation: scrollUnfold 60s ease-in-out infinite alternate; 
+      /* MODIFIED: Added back slight blur for hazy effect */
+      filter: blur(2px);
+    }
+    
+    /* MODIFIED: Keyframes pan a smaller, more central area */
+    @keyframes scrollUnfold {
+      0% {
+        background-position: 40% 50%; /* Start pan */
+      }
+      100% {
+        background-position: 60% 50%; /* End pan */
+      }
+    }
+    
+    /* MODIFIED: Reduced overlay opacity slightly more */
+    body::after{
+      content:""; 
+      position:fixed; 
+      inset:0; 
+      z-index:-1; 
+      background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.55));
+    }
 
     /* Layout proportions (more harmonious) */
     .shell{display:flex; min-height:100vh;}
@@ -186,7 +218,7 @@
     .film-row:last-child { border-bottom: none; }
     .film-poster {
         flex: 0 0 38.2%;
-        max-width: 180px; /* MODIFIED: Increased size (was 130px) */
+        max-width: 160px; /* MODIFIED: Was 180px, now 160px */
     }
     .film-poster img {
         width: 100%;
@@ -199,7 +231,7 @@
         flex: 1; /* Takes remaining 61.8% */
     }
     .film-desc p {
-        font-size: 16px; 
+        font-size: 17.5px; /* MODIFIED: Was 16px, now 17.5px */
         color: #2c3e50; 
         margin: 6px 0;
     }
@@ -321,7 +353,7 @@
               <div class="view-overlay">View</div>
             </div>
             <div class="publication-text">
-              <span class="papertitle">Optical-Infrared Image Translation Based on Diffusion Models</span>
+              <span class="papertitle">Optical-Infrared Image Translation Based on Diftfusion Models</span>
               <div class="authors">
                 <strong>Yuxin Zhao</strong>, Zihao Gao, Huaizhang Liao, Tao Han, Jingyuan Xia.
               </div>
@@ -382,6 +414,15 @@
                 <div class="film-desc">
                   <p><strong>悲情城市</strong></p>
                   <p>时代的噪音吞没个人命运，静观镜头让历史的疼痛慢慢显形。</p>
+                </div>
+              </div>
+              <div class="film-row">
+                <div class="film-poster">
+                  <img src="film_notes/浮云.jpg?raw=true" alt="浮云海报">
+                </div>
+                <div class="film-desc">
+                  <p><strong>浮云</strong></p>
+                  <p>作为历史的战争似已远去，曾经的珍惜亦不复返。</p>
                 </div>
               </div>
               <div class="film-row">

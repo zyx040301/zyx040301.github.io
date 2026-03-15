@@ -1,633 +1,1023 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Yuxin Zhao — Academic Homepage" />
-  <title>Yuxin Zhao — Academic Homepage</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRA-ISAR | 星穹空间目标 ISAR 多任务基准</title>
   <style>
-    :root{
-      --ink:#33383a; --muted:#6f7579; --leaf:#7aa784; --leaf-weak:#dce8d6; --paper:#ffffff; --shadow:0 10px 28px rgba(0,0,0,.08);
-      --error: #e74c3c;
-    }
-    html,body{height:100%;}
-    body{margin:0; font-family:"Lato", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; color:var(--ink); background:#f6f7f6; line-height:1.7; letter-spacing:.2px; opacity:0; animation:pageFadeIn 1.1s ease-out forwards; position:relative; min-height:100vh;}
-    @keyframes pageFadeIn{from{opacity:0}to{opacity:1}}
-
-    /* Background */
-    body::before{
-      content:""; 
-      position:fixed; 
-      inset:0; 
-      z-index:-2; 
-      background-image:url('Dwelling%20by%20the%20West%20Lake.jpg?raw=true');
-      background-size: cover; 
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-      animation: scrollUnfold 60s ease-in-out infinite alternate; 
-      filter: blur(2px);
-    }
-    
-    @keyframes scrollUnfold {
-      0% { background-position: 40% 50%; }
-      100% { background-position: 60% 50%; }
-    }
-    
-    body::after{
-      content:""; 
-      position:fixed; 
-      inset:0; 
-      z-index:-1; 
-      background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.55));
+    :root {
+      --bg: #F2F0DE;
+      --blue-1: #99ABE6;
+      --blue-2: #5F80B8;
+      --blue-3: #496B95;
+      --navy: #243646;
+      --green-1: #3F6B4D;
+      --green-2: #677F72;
+      --accent: #E7E14A;
+      --paper: rgba(255, 255, 255, 0.48);
+      --line: rgba(36, 54, 70, 0.14);
+      --shadow: 0 24px 48px rgba(36, 54, 70, 0.08);
+      --text: var(--navy);
+      --text-soft: rgba(36, 54, 70, 0.78);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max-width: 1240px;
     }
 
-    /* Layout proportions */
-    .shell{display:flex; min-height:100vh;}
-    .sidebar{width:26%; min-width:260px; max-width:360px; background:var(--leaf-weak); padding:40px 30px; box-shadow:2px 0 18px rgba(0,0,0,.06); display:flex; flex-direction:column; align-items:center; text-align:center;}
-    .avatar{width:192px; height:192px; border-radius:50%; object-fit:cover; box-shadow:var(--shadow)}
-    .name{margin:16px 0 2px; font:700 28px/1.2 Georgia, "Times New Roman", serif; letter-spacing:.3px}
-    .affil{margin:0; color:var(--muted); font-weight:600}
-    nav{margin-top:30px; width:100%}
-    nav a{display:block; padding:10px 0; font-size:17px; color:var(--ink); text-decoration:none; transition:color .25s ease}
-    nav a:hover{color:var(--leaf)}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-    .content-wrap{flex:1; padding:28px; display:flex;}
-    .content{flex:1; max-width:1080px; width:100%; margin:0 auto;}
-
-    section.card{display:none; background:var(--paper); border-radius:16px; box-shadow:var(--shadow); padding:36px;}
-    section.card.active{display:block}
-
-    h2{font:700 26px/1.2 Georgia, "Times New Roman", serif; color:var(--leaf); letter-spacing:.2px; margin:0 0 18px; border-bottom:2px solid #cfd8cf; padding-bottom:10px}
-    h3{font:700 20px/1.3 Georgia, "Times New Roman", serif; color:#34495e; margin:22px 0 8px}
-    p, li{font-size:17.5px}
-
-    ul.clean{list-style:none; padding:0; margin:0}
-    ul.clean li{margin:10px 0}
-
-    /* --- News Section --- */
-    .news-item { font-size: 17.5px; margin-bottom: 15px; }
-    .news-item strong { color: var(--leaf); font-weight: 700; margin-right: 8px; }
-    
-    /* --- Publications Section --- */
-    .publication-row { display: flex; align-items: flex-start; gap: 28px; padding: 25px 0; border-bottom: 1px solid #e7eee6; }
-    .publication-row:last-child { border-bottom: none; padding-bottom: 10px; }
-    .publication-image { flex: 0 0 38.2%; max-width: 420px; position: relative; cursor: zoom-in; overflow: hidden; border-radius: 10px; }
-    .publication-image img { width: 100%; height: auto; display: block; border-radius: 10px; box-shadow: var(--shadow); transition: transform 0.3s ease; }
-    .view-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2em; font-weight: 600; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; border-radius: 10px; }
-    .publication-image:hover img { transform: scale(1.03); }
-    .publication-image:hover .view-overlay { opacity: 1; }
-    .publication-text { flex: 1; }
-    .papertitle { font-size: 20px; font-weight: 700; color: var(--ink); display: block; margin-bottom: 8px; line-height: 1.3; }
-    .publication-text .authors { font-size: 16px; margin: 5px 0; line-height: 1.6; }
-    .publication-text .venue { font-size: 16px; font-style: italic; color: var(--muted); }
-    .publication-text .links { font-size: 16px; margin-top: 10px; }
-    .publication-text .links a { color: var(--leaf); font-weight: 600; text-decoration: none; margin-right: 15px; }
-    .publication-text .links a:hover { text-decoration: underline; }
-    .publication-text p { font-size: 16px; color: var(--muted); margin: 12px 0 0; line-height: 1.6; }
-
-    /* --- Lightbox Styles --- */
-    #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.88); z-index: 1000; display: none; align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; transition: opacity 0.3s ease; }
-    #lightbox.active { display: flex; }
-    #lightbox img { max-width: 90%; max-height: 90%; box-shadow: 0 0 40px rgba(0,0,0,0.5); border-radius: 4px; transform: scale(0.8); transition: transform 0.3s ease; }
-
-    /* --- Film Notes & Lock System --- */
-    .film-container {
-        position: relative;
-        overflow: hidden; 
-        border-radius: 12px;
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(153, 171, 230, 0.24), transparent 34%),
+        radial-gradient(circle at top right, rgba(103, 127, 114, 0.16), transparent 28%),
+        linear-gradient(180deg, #f6f4e7 0%, var(--bg) 55%, #ece9d8 100%);
+      font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.72;
     }
 
-    .film-notes {
-        max-height: 460px;
-        overflow: auto;
-        padding-right: 8px;
-        margin-top: 14px;
-        transition: filter 0.6s ease;
-    }
-    
-    .film-notes.locked {
-        filter: blur(12px) grayscale(30%);
-        pointer-events: none;
-        overflow: hidden;
-    }
-
-    .lock-overlay {
-        position: absolute;
-        inset: 0;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.25);
-        transition: opacity 0.6s ease, visibility 0.6s ease;
-        backdrop-filter: blur(4px);
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(95, 128, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95, 128, 184, 0.06) 1px, transparent 1px);
+      background-size: 30px 30px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.22), transparent 72%);
+      z-index: -1;
     }
 
-    .lock-overlay.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
+    a { color: var(--blue-3); text-decoration: none; }
+    a:hover { color: var(--green-1); }
+    img { display: block; max-width: 100%; }
+
+    .shell {
+      width: min(var(--max-width), calc(100% - 32px));
+      margin: 0 auto;
     }
 
-    .lock-card {
-        background: rgba(255, 255, 255, 0.85);
-        padding: 40px 50px;
-        border-radius: 16px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 400px;
-        width: 80%;
-        border: 1px solid rgba(255,255,255,0.6);
-        transform: translateY(0);
-        transition: transform 0.4s ease;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(242, 240, 222, 0.84);
+      border-bottom: 1px solid rgba(36, 54, 70, 0.08);
     }
 
-    .lock-card h4 {
-        margin: 0 0 20px;
-        font-family: Georgia, serif;
-        font-size: 22px;
-        color: var(--ink);
+    .topbar-inner {
+      width: min(var(--max-width), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
     }
 
-    .lock-card p.question {
-        font-size: 16px;
-        color: var(--muted);
-        margin-bottom: 25px;
-        font-style: italic;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
     }
 
-    .lock-input-group {
-        position: relative;
-        margin-bottom: 25px;
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      position: relative;
+      background:
+        radial-gradient(circle at 30% 30%, var(--accent), rgba(231, 225, 74, 0.72) 22%, var(--blue-2) 56%, var(--navy) 100%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.32);
+      flex: none;
     }
 
-    .lock-input {
-        width: 100%;
-        padding: 10px 0;
-        font-size: 18px;
-        color: var(--ink);
-        border: none;
-        border-bottom: 2px solid #ddd;
-        background: transparent;
-        outline: none;
-        text-align: center;
-        font-family: inherit;
-        transition: border-color 0.3s;
-        border-radius: 0;
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.46);
     }
 
-    .lock-input:focus {
-        border-bottom-color: var(--leaf);
-    }
-    
-    .lock-input::placeholder {
-        color: #bbb;
-        font-size: 15px;
-    }
+    .brand-mark::before { inset: 7px; }
+    .brand-mark::after { inset: 13px 4px; transform: rotate(28deg); }
 
-    .lock-btn {
-        background: var(--leaf);
-        color: white;
-        border: none;
-        padding: 10px 32px;
-        font-size: 16px;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: inherit;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 15px rgba(122, 167, 132, 0.3);
+    .brand-copy { min-width: 0; }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 1.02rem;
+      font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", serif;
+      letter-spacing: 0.02em;
+      color: var(--navy);
     }
 
-    .lock-btn:hover {
-        background: #689271;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(122, 167, 132, 0.4);
+    .brand-copy span {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--text-soft);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-    
-    .shake {
-        animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        border-bottom-color: var(--error) !important;
-        color: var(--error);
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: flex-end;
+      font-size: 0.92rem;
+      color: var(--text-soft);
     }
 
-    .film-list{width:100%;}
-    .film-row { display: flex; align-items: flex-start; gap: 24px; padding: 14px 6px; border-bottom: 1px solid #e7eee6; }
-    .film-row:last-child { border-bottom: none; }
-    .film-poster { flex: 0 0 38.2%; max-width: 160px; }
-    .film-poster img { width: 100%; height: auto; border-radius: 10px; box-shadow: var(--shadow); display: block; }
-    .film-desc { flex: 1; }
-    .film-desc p { font-size: 17.5px; color: #2c3e50; margin: 6px 0; }
-    .film-desc p:first-of-type { margin-top: 0; }
+    .nav-links a { color: inherit; }
+    main { padding: 40px 0 72px; }
+    section { margin-bottom: 28px; }
 
-    footer{position:fixed; bottom:0; left:0; right:0; background:var(--leaf-weak); color:var(--ink); border-top:3px solid #b0c5a1; text-align:center; font-size:11px; padding:6px}
+    .panel {
+      position: relative;
+      overflow: hidden;
+      padding: 30px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
 
-    @media (max-width: 980px){
-      .shell{flex-direction:column}
-      .sidebar{width:100%; max-width:none; padding: 25px 20px;}
-      .content-wrap { padding: 15px; }
-      section.card { padding: 24px; }
-      h2 { font-size: 24px; } 
-      p, li { font-size: 17px; }
-      .papertitle { font-size: 19px; } 
-      .publication-row { flex-direction: column; gap: 20px; }
-      .publication-image { max-width: 100%; flex-basis: auto; }
-      .film-row { gap: 16px; }
-      .film-poster { max-width: 110px; }
-      footer { position: relative; margin-top: 20px; }
-      .lock-card { padding: 30px 20px; }
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at top right, rgba(153, 171, 230, 0.18), transparent 26%),
+        radial-gradient(circle at left center, rgba(103, 127, 114, 0.1), transparent 28%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: var(--green-1);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: rgba(63, 107, 77, 0.52);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      line-height: 1.22;
+      font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", serif;
+      color: var(--navy);
+    }
+
+    h1 { font-size: clamp(2.5rem, 4vw, 4.5rem); letter-spacing: 0.01em; }
+    h2 { font-size: clamp(1.8rem, 2.4vw, 2.6rem); margin-bottom: 12px; }
+    h3 { font-size: 1.2rem; margin-bottom: 10px; }
+    p { margin: 0; color: var(--text-soft); }
+
+    .hero-grid,
+    .track-row,
+    .taxonomy-grid,
+    .refs-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr); gap: 26px; }
+    .hero-copy,
+    .hero-why,
+    .track-head,
+    .track-heading,
+    .track-title,
+    .track-deck,
+    .sample-card,
+    .track-callout,
+    .protocol-copy { display: grid; gap: 14px; }
+
+    .hero-kicker,
+    .track-index,
+    .target-code,
+    .legend-chip,
+    .filter-btn,
+    .sample-link {
+      border-radius: 999px;
+    }
+
+    .hero-kicker,
+    .track-index {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 8px 14px;
+      background: rgba(153, 171, 230, 0.16);
+      color: var(--blue-3);
+      font-size: 0.86rem;
+      font-weight: 700;
+      border: 1px solid rgba(73, 107, 149, 0.18);
+    }
+
+    .full-name {
+      display: block;
+      font-size: 1.02rem;
+      color: var(--blue-3);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-tagline {
+      margin-top: 10px;
+      width: 100%;
+      max-width: min(100%, 96ch);
+      color: var(--green-1);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-wrap: pretty;
+    }
+
+    .hero-intro { display: grid; gap: 14px; max-width: 74ch; }
+
+    .why-card,
+    .track-row,
+    .taxonomy-card,
+    .refs-card,
+    .meta-card,
+    .special-card,
+    .target-card {
+      border: 1px solid rgba(36, 54, 70, 0.11);
+      background: rgba(255, 255, 255, 0.56);
+    }
+
+    .why-card {
+      padding: 18px 18px 18px 20px;
+      border-radius: var(--radius-lg);
+      border-left: 4px solid var(--blue-3);
+    }
+
+    .why-card strong { display: block; margin-bottom: 8px; color: var(--navy); font-size: 1rem; }
+
+    .track-list { position: relative; z-index: 1; display: grid; gap: 18px; margin-top: 18px; }
+    .track-row {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .track-head { align-items: start; max-width: 100%; }
+    .track-title { gap: 8px; }
+    .track-title .en { color: var(--green-1); font-size: 0.95rem; font-weight: 700; }
+    .track-summary {
+      width: 100%;
+      max-width: min(100%, 128ch);
+      text-wrap: pretty;
+    }
+
+    .track-deck {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .track-deck-wide {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .meta-card,
+    .special-card,
+    .taxonomy-card,
+    .refs-card { padding: 16px 18px; border-radius: var(--radius-md); }
+
+    .meta-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green-1);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .special-card {
+      background: linear-gradient(180deg, rgba(153, 171, 230, 0.18), rgba(255, 255, 255, 0.56));
+      border: 1px solid rgba(73, 107, 149, 0.16);
+    }
+
+    .special-card > strong { display: block; margin-bottom: 10px; color: var(--navy); font-size: 1rem; }
+    .track-callout {
+      grid-column: span 2;
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(73, 107, 149, 0.16);
+      background: linear-gradient(180deg, rgba(153, 171, 230, 0.18), rgba(255, 255, 255, 0.62));
+    }
+
+    .track-callout > strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .mini-list,
+    .taxonomy-card ul,
+    .refs-card ul { margin: 0; padding-left: 18px; color: var(--text-soft); }
+    .mini-list li + li,
+    .taxonomy-card li + li,
+    .refs-card li + li { margin-top: 8px; }
+    .mini-list strong { display: inline; margin: 0; font-size: inherit; }
+
+    .sample-link {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      background: var(--blue-3);
+      color: #fff;
+      font-weight: 700;
+      border: 1px solid rgba(73, 107, 149, 0.12);
+      transition: 160ms ease;
+    }
+
+    .sample-link:hover { background: var(--green-1); color: #fff; }
+    .sample-card { align-content: start; }
+
+    .protocol-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .protocol-copy {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      margin-top: 2px;
+      max-width: min(100%, 120ch);
+      text-wrap: pretty;
+    }
+
+    .protocol-shot {
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(36, 54, 70, 0.12);
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .protocol-shot img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      padding: 10px;
+      background: #04070c;
+    }
+
+    .protocol-shot figcaption {
+      display: grid;
+      gap: 4px;
+      padding: 12px;
+    }
+
+    .protocol-shot strong {
+      color: var(--navy);
+      font-size: 0.92rem;
+    }
+
+    .protocol-shot span {
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .taxonomy-grid,
+    .refs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 18px; }
+
+    .legend-row {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid rgba(36, 54, 70, 0.12);
+      background: rgba(255, 255, 255, 0.52);
+      color: var(--navy);
+      font-size: 0.88rem;
+    }
+
+    .gallery-copy {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: min(100%, 120ch);
+      text-wrap: pretty;
+    }
+
+    .filters {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: auto auto minmax(240px, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .filter-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .filter-btn {
+      border: 1px solid rgba(36, 54, 70, 0.14);
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--text-soft);
+      padding: 10px 14px;
+      cursor: pointer;
+      font: inherit;
+      transition: 160ms ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: rgba(73, 107, 149, 0.14);
+      border-color: rgba(73, 107, 149, 0.22);
+      color: var(--blue-3);
+    }
+
+    .search {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(36, 54, 70, 0.14);
+      background: rgba(255, 255, 255, 0.62);
+      color: var(--navy);
+      font: inherit;
+    }
+
+    .targets-grid {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .target-card {
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .target-image {
+      aspect-ratio: 1 / 1;
+      padding: 18px;
+      background:
+        radial-gradient(circle at top, rgba(153, 171, 230, 0.28), transparent 48%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(242, 240, 222, 0.18));
+      border-bottom: 1px solid rgba(36, 54, 70, 0.08);
+    }
+
+    .target-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 24px rgba(36, 54, 70, 0.12));
+    }
+
+    .target-body { padding: 16px; display: grid; gap: 10px; flex: 1; }
+
+    .target-code {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      padding: 6px 10px;
+      background: rgba(231, 225, 74, 0.24);
+      color: var(--navy);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid rgba(231, 225, 74, 0.42);
+    }
+
+    .target-body strong { display: block; color: var(--navy); font-size: 1.02rem; }
+    .target-body span { color: var(--text-soft); font-size: 0.88rem; }
+
+    @media (max-width: 1180px) {
+      .targets-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .protocol-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .track-deck,
+      .track-deck-wide,
+      .taxonomy-grid,
+      .refs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .track-callout {
+        grid-column: span 1;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .panel {
+        padding: 24px;
+      }
+
+      .protocol-grid,
+      .targets-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <aside class="sidebar">
-      <img class="avatar" src="avatar.png?raw=true" alt="Yuxin Zhao" />
-      <div class="name">Yuxin Zhao</div>
-      <p class="affil">Qian Class Student at NUDT</p>
-      <nav>
-        <a href="#" onclick="show('about')">About Me</a>
-        <a href="#" onclick="show('news')">News</a>
-        <a href="#" onclick="show('pubs')">Publications</a>
-        <a href="#" onclick="show('hobbies')">Hobbies</a>
-        <a href="#" onclick="show('contact')">Contact</a>
-      </nav>
-    </aside>
-
-    <main class="content-wrap">
-      <div class="content">
-
-        <section id="about" class="card active">
-          <h2>About Me</h2>
-          <p><strong>I am currently an undergraduate student</strong> at the NUDT, majoring in Information Engineering in the Qian Class. I graduated from the High School Affiliated to Nanjing Normal University. My research focuses on the intersection of <b>machine learning</b> and <b>remote sensing image processing</b>, particularly in developing generative models for <b>cross-modal AIGC tasks</b>. Beyond research, I enjoy film studies, swimming, and exploring classical & contemporary cinema aesthetics.</p>
-          <h3>Research Interests</h3>
-          <ul class="clean">
-            <li><strong>Generative Models for Image Translation</strong>: Developing and applying generative models (e.g., Diffusion, GANs) for high-fidelity, cross-domain image translation (e.g., Optical-to-ISAR).</li>
-            <li><strong>Semantic-Aware Remote Sensing</strong>: Utilizing semantic information (like segmentation) to guide and improve the alignment and translation between different sensor modalities in remote sensing.</li>
-          </ul>
-        </section>
-
-        <section id="news" class="card">
-          <h2>News</h2>
-          <div class="news-list">
-            <p class="news-item">
-              <strong>[Apr 2025]</strong> Our paper <em>SAIG: Semantic‑Aware ISAR Generation via Component‑Level Semantic Segmentation</em> was accepted by <em>IEEE Geoscience and Remote Sensing Letters (GRSL)</em>.
-            </p>
-            <p class="news-item">
-              <strong>[Jun 2024]</strong> Our paper <em>Optical‑infrared image translation based on diffusion models</em> was published in <em>Proceedings of SPIE</em> (Conference on Spectral Technology and Applications, CSTA 2024).
-            </p>
-          </div>
-        </section>
-
-        <section id="pubs" class="card">
-          <h2>Publications</h2>
-          <div class="publication-row">
-            <div class="publication-image">
-              <img src="publications/2025-GRSL-SAIG.png" alt="Preview of SAIG paper">
-              <div class="view-overlay">View</div>
-            </div>
-            <div class="publication-text">
-              <span class="papertitle">SAIG: Semantic-Aware ISAR Generation via Component-Level Semantic Segmentation</span>
-              <div class="authors">
-                <strong>Yuxin Zhao</strong>, Huaizhang Liao, Derong Kong, Zhixiong Yang, Jingyuan Xia.
-              </div>
-              <div class="venue">
-                <em>IEEE Geoscience and Remote Sensing Letters (GRSL)</em>, 2025.
-              </div>
-              <div class="links">
-                <a href="https://ieeexplore.ieee.org/document/10975048" target="_blank" rel="noopener">Paper Link</a>
-              </div>
-              <p>
-                This letter proposes SAIG, a semantic-aware framework for generating high-fidelity inverse synthetic aperture radar (ISAR) images from optical images. SAIG achieves this by learning mutual semantic segmentation maps and incorporating component-level refinement to preserve scattering characteristics.
-              </p>
-            </div>
-          </div>
-          <div class="publication-row">
-            <div class="publication-image">
-              <img src="publications/2024-SPIE-SIGDM.png" alt="Preview of SIGDM paper">
-              <div class="view-overlay">View</div>
-            </div>
-            <div class="publication-text">
-              <span class="papertitle">Optical-Infrared Image Translation Based on Diftfusion Models</span>
-              <div class="authors">
-                <strong>Yuxin Zhao</strong>, Zihao Gao, Huaizhang Liao, Tao Han, Jingyuan Xia.
-              </div>
-              <div class="venue">
-                <em>Conference on Spectral Technology and Applications</em>, Proc. of SPIE, 2024.
-              </div>
-              <div class="links">
-                <a href="https://www.spiedigitallibrary.org/conference-proceedings-of-spie/13283/1328330/Optical-infrared-image-translation-based-on-diffusion-models/10.1117/12.3036995.short" target="_blank" rel="noopener">Paper Link</a>
-              </div>
-              <p>
-                This paper proposes a diffusion-based method (SIGDM) to translate optical images into infrared images, addressing the high cost and limitations of traditional cross-domain registration. The method uses VQ-VAE for latent space formation and a stochastic Brownian Bridge diffusion process for modal alignment.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section id="hobbies" class="card">
-          <h2>Hobbies</h2>
-          <p>I love research and cinema. Outside the lab, I swim, roller‑skate, and play piano/ocarina. I also keep notes on films and film theory.</p>
-          <h3>Film Notes</h3>
-          <p style="font-size:13px;color:gray;margin-top:-10px;margin-bottom:10px;">图片来源：<a href="https://www.douban.com/" target="_blank" style="color:gray;text-decoration:underline;">豆瓣电影（https://www.douban.com/）</a></p>
-          
-          <div class="film-container">
-            
-            <div class="lock-overlay" id="filmLock">
-              <div class="lock-card">
-                <h4>Locked Content</h4>
-                <p class="question">Who is my favorite director?</p>
-                <div class="lock-input-group">
-                  <input type="text" id="directorInput" class="lock-input" placeholder="Enter Answer" autocomplete="off">
-                </div>
-                <button class="lock-btn" onclick="checkAnswer()">View Notes</button>
-              </div>
-            </div>
-
-            <div class="film-notes locked" id="filmContent">
-              <div class="film-list">
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/一代宗师.jpg?raw=true" alt="一代宗师海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>一代宗师</strong></p>
-                    <p>以武学身法折射传统的“后脚跟”，在光影里讨论现代性与根性。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/情书.jpg?raw=true" alt="情书海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>情书</strong></p>
-                    <p>镜像自我的回声室，记忆把缺席的人塑成了爱的投影。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/一一.jpg?raw=true" alt="一一海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>一一</strong></p>
-                    <p>我们始终只能看见生活的一半，另一半隐藏在沉默与日常里。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/悲情城市.jpg?raw=true" alt="悲情城市海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>悲情城市</strong></p>
-                    <p>时代的噪音吞没个人命运，静观镜头让历史的疼痛慢慢显形。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/浮云.jpg?raw=true" alt="浮云海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>浮云</strong></p>
-                    <p>作为历史的战争似已远去，曾经的珍惜亦不复返。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/蓝白红三部曲之蓝.jpg?raw=true" alt="蓝白红之蓝海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>蓝白红三部曲之蓝</strong></p>
-                    <p>失去后的自由像一池冷水，情感在克制里回温成新的自我。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/阮玲玉.jpg?raw=true" alt="阮玲玉海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>阮玲玉</strong></p>
-                    <p>戏梦人生，虚实难辨。光影重构中，关于尊严的叹息——人言可畏。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/游园惊梦.jpg?raw=true" alt="游园惊梦海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>游园惊梦</strong></p>
-                    <p>欲与梦互为镜像，越追索越看见情感的空无与执念。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/飞向太空.jpg?raw=true" alt="飞向太空海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>飞向太空</strong></p>
-                    <p>记忆以人的模样返回，科幻折叠成一场关于失而得的伦理试验。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/三峡好人.jpg?raw=true" alt="三峡好人海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>三峡好人</strong></p>
-                    <p>巨变背景里的人间小事，拆迁声里漂浮着最轻也最重的情感。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/春江水暖.jpg?raw=true" alt="春江水暖海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>春江水暖</strong></p>
-                    <p>河道的潮汐像家族的呼吸，静水深流里藏着代际的疼与爱。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/魔女宅急便.jpg?raw=true" alt="魔女宅急便海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>魔女宅急便</strong></p>
-                    <p>成长是学会把平凡做到可靠，飞行不过是找到自己的风。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/星际穿越.jpg?raw=true" alt="星际穿越海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>星际穿越</strong></p>
-                    <p>时间在亲情面前弯曲，宇宙尺度的宏大最终指向一间房的灯光。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/雾中风景.jpg?raw=true" alt="雾中风景海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>雾中风景</strong></p>
-                    <p>寻父的奥德赛，现实与幻想的边界消融于诗意的迷雾。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/大鱼.jpg?raw=true" alt="大鱼海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>大鱼</strong></p>
-                    <p>父亲的奇幻，瑰丽想象的现实，不朽的故事。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/大象席地而坐.jpg?raw=true" alt="大象席地而坐海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>大象席地而坐</strong></p>
-                    <p>四小时的灰暗凝视，个体困境碾压成时代注脚，虚无的彼岸。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/与玛格丽特的午后.jpg?raw=true" alt="与玛格丽特的午后海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>与玛格丽特的午后</strong></p>
-                    <p>关于阅读的忘年之交，文字成为跨越偏见的桥梁，照亮灵魂。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/沙丘2.jpg?raw=true" alt="沙丘2海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>沙丘2</strong></p>
-                    <p>宏大的视听史诗，信仰被权力异化为战争机器。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/攻壳机动队.jpg?raw=true" alt="攻壳机动队海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>攻壳机动队</strong></p>
-                    <p>赛博朋克，冰冷义体与数据洪流，何以为人的灵魂归宿。</p>
-                  </div>
-                </div>
-                <div class="film-row">
-                  <div class="film-poster">
-                    <img src="film_notes/吴清源.jpg?raw=true" alt="吴清源海报">
-                  </div>
-                  <div class="film-desc">
-                    <p><strong>吴清源</strong></p>
-                    <p>黑白棋局映照百年孤独，克制与留白中，求道者的中和。</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="contact" class="card">
-          <h2>Contact</h2>
-          <p>Email: <a href="mailto:yuxin_zhao04@163.com"><strong>yuxin_zhao04@163.com</strong></a></p>
-        </section>
-
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <strong>ASTRA-ISAR</strong>
+          <span>星穹空间目标 ISAR 多任务基准</span>
+        </div>
       </div>
-    </main>
-  </div>
+      <nav class="nav-links" aria-label="Section links">
+        <a href="#overview">概览</a>
+        <a href="#tracks">五个 Track</a>
+        <a href="#taxonomy">分类体系</a>
+        <a href="#gallery">目标浏览</a>
+        <a href="#references">参考文献 / 网页</a>
+      </nav>
+    </div>
+  </header>
 
-  <div id="lightbox">
-    <img src="" alt="Enlarged publication image">
-  </div>
+  <main class="shell">
+    <section class="panel" id="overview">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="hero-kicker">Pre-release Multi-Track Benchmark</div>
+          <div>
+            <h1>ASTRA-ISAR</h1>
+            <span class="full-name">A Space-Target Radar Benchmark for Imaging, Generation, and Perception</span>
+            <p class="hero-tagline">星穹空间目标 ISAR 多任务基准</p>
+          </div>
+          <div class="hero-intro">
+            <p>ASTRA-ISAR（A Space-Target Radar Benchmark for Imaging, Generation, and Perception）面向空间目标雷达感知与成像研究，中文标准名为“空间目标雷达成像、生成与感知基准”。数据集围绕统一的物理观测链组织 LOS 几何、复数回波、ISAR 图像、光学对齐视图、几何字段与语义标注，不是若干单任务样本集的简单拼接，而是试图把同一目标在同一观测逻辑下的多层级数据整理为同源、可追溯、便于复现实验的数据基座。</p>
+            <p>数据集按 Echo、Enhance、Geo、Gen、Perception 五个 Track 组织，从底层电磁观测延伸到高层分类、检测与分割。当前版本为预发布说明页，优先明确任务边界、数据组织、协议逻辑与目标分类依据，使使用者能够快速理解各 Track 的适用问题与使用入口。</p>
+          </div>
+        </div>
 
-  <footer>&copy; 2025 Yuxin Zhao. All Rights Reserved.</footer>
+        <div class="hero-why">
+          <article class="why-card">
+            <strong>为什么需要 ASTRA-ISAR</strong>
+            <p>依据现有公开文献整理，空间目标 ISAR 研究仍缺少公开发布、结构统一、覆盖从回波到感知完整链路的多任务基准；已有数据多服务于单篇论文或单一任务，难以形成可持续复用的开放入口。</p>
+          </article>
+          <article class="why-card">
+            <strong>协议应带有观测几何意义</strong>
+            <p>仅有随机 train / test 划分不足以支撑空间目标评测。ASTRA-ISAR 强调弧段、视角与观测条件的可解释协议，使相似条件泛化与外推条件泛化能够被清楚地区分。</p>
+          </article>
+          <article class="why-card">
+            <strong>同源观测链支持跨层级研究</strong>
+            <p>原始回波、成像、几何、跨模态生成与感知任务通常彼此割裂。ASTRA-ISAR 的目标是把这些层级重新连接起来，使算法能够在共享物理来源的前提下进行对齐分析与联合建模。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="tracks">
+      <div class="eyebrow">Five Tracks</div>
+      <h2>五个 Track</h2>
+      <p>五个 Track 共同构成从底层复数观测到高层任务评测的完整研究链路。它们共享统一的目标模型、观测几何与成像主链，同时分别突出原始回波、物理退化、连续几何、跨模态对齐与协议化感知等不同研究入口。</p>
+
+      <div class="track-list">
+        <article class="track-row">
+          <div class="track-head">
+            <span class="track-index">Track 1 Echo</span>
+            <div class="track-title">
+              <h3>原始回波与微动建模</h3>
+              <div class="en">Raw Echo &amp; Micro-Motion</div>
+            </div>
+            <p class="track-summary">Track 1 保留底层二维复数域回波，而不是只发布最终图像。弧段级 Echo、帧级 Echo Slice 与对应 ISAR 图像构成可一一追溯的监督链，适合前端成像、自聚焦、运动补偿与微动估计等问题。</p>
+          </div>
+          <div class="track-deck">
+            <div class="meta-card">
+              <span class="meta-label">数据形态</span>
+              <p>弧段级复数回波 <code>.mat</code>、帧级回波切片 <code>.mat</code>、对应 ISAR 图像与几何 sidecar。</p>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">任务与指标</span>
+              <p>自聚焦、运动补偿、微动估计、回波到聚焦成像建模；常用指标包括 PSLR、ISLR、图像熵、对比度与成像链一致性。</p>
+            </div>
+            <div class="meta-card sample-card">
+              <span class="meta-label">示例与状态</span>
+              <p>该 Track 已具备回波、切片与成像严格同源的预发布基础，可直接用于信号处理与端到端建模。</p>
+              <a class="sample-link" href="assets/examples/track-echo/README.md">示例文件说明</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-row">
+          <div class="track-head">
+            <span class="track-index">Track 2 Enhance</span>
+            <div class="track-title">
+              <h3>物理退化与图像恢复</h3>
+              <div class="en">Physics-Grounded Degradation &amp; Restoration</div>
+            </div>
+            <p class="track-summary">Track 2 面向雷达特有退化，而非通用视觉中的高斯噪声假设。它从回波链路出发注入相位误差、平动误差、接收机噪声等物理退化，并逐步扩展到频域截断、旁瓣与 speckle 等更完整的恢复问题。</p>
+          </div>
+          <div class="track-deck">
+            <div class="meta-card">
+              <span class="meta-label">数据形态</span>
+              <p><code>&lt;退化回波, 理想回波&gt;</code> 或 <code>&lt;退化图, 理想图&gt;</code> 的成对样本，强调退化机理明确、真值可追溯。</p>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">任务与指标</span>
+              <p>盲超分辨、去噪、旁瓣抑制与物理驱动恢复；评测可结合 ENL、PSNR、SSIM 以及结构与物理一致性。</p>
+            </div>
+            <div class="meta-card sample-card">
+              <span class="meta-label">示例与状态</span>
+              <p>该 Track 已具备物理退化注入底座，正式发布版本将继续补齐更完整的退化族和统一成对打包协议。</p>
+              <a class="sample-link" href="assets/examples/track-enhance/README.md">示例文件说明</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-row">
+          <div class="track-head">
+            <span class="track-index">Track 3 Geo</span>
+            <div class="track-title">
+              <h3>连续几何与三维散射重建</h3>
+              <div class="en">Continuous Geometry &amp; 3D Scatter Reconstruction</div>
+            </div>
+            <p class="track-summary">Track 3 面向连续多视角几何恢复与三维散射建模。它强调姿态变化平滑、视角采样连续以及面向 3DGS / NeRF 的可训练几何导出格式，使几何字段不仅可看，而且可直接进入重建模型。</p>
+          </div>
+          <div class="track-deck">
+            <div class="meta-card">
+              <span class="meta-label">数据形态</span>
+              <p>多视图 ISAR 序列、姿态 / 法向量 / 几何字段，以及 <code>transforms_train.json</code>、<code>transforms_test.json</code> 等训练接口。</p>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">任务与指标</span>
+              <p>3DGS、NeRF、多视图一致性建模、三维散射恢复；可关注渲染 PSNR、几何误差、RCS 一致性与跨视图稳定性。</p>
+            </div>
+            <div class="meta-card sample-card">
+              <span class="meta-label">示例与状态</span>
+              <p>该 Track 已具备几何字段导出与训练 JSON 接口，当前重点是把连续视角序列进一步收敛为大规模正式协议。</p>
+              <a class="sample-link" href="assets/examples/track-geo/README.md">示例文件说明</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-row">
+          <div class="track-head">
+            <span class="track-index">Track 4 Gen</span>
+            <div class="track-title">
+              <h3>跨模态对齐生成与多波段泛化</h3>
+              <div class="en">Cross-Modal Aligned Generation &amp; Multi-Band Generalization</div>
+            </div>
+            <p class="track-summary">Track 4 并非从真实轨道弧段出发，而是从人为设计的全视角观测分布出发构造严格对齐的跨模态样本。它以近似均匀球面采样生成全姿态观察方向，并在每个方向上同步导出 ISAR、Optical、Optical_ISAR_View、EchoSlice 以及可继续进入 3DGS / NeRF 的训练接口，用于支撑姿态条件生成、跨模态翻译与多波段泛化研究。</p>
+          </div>
+          <div class="track-deck track-deck-wide">
+            <div class="track-callout">
+              <strong>视角与姿态生成</strong>
+              <ul class="mini-list">
+                <li>默认在单位球面上近似均匀采样 <strong>120</strong> 个观察方向，可理解为接近 Fibonacci sphere / golden spiral 的全姿态分布。</li>
+                <li>每个方向默认 <strong>PRF = 100 Hz</strong>、<strong>Duration = 6 s</strong>、<strong>RotationSpeed = 0.02 rad/s</strong>，因此约生成 <strong>600</strong> 个慢时间采样点，总局部转角约 <strong>6.87°</strong>。</li>
+                <li>默认以本体 <strong>Z</strong> 轴投影作为等效自旋轴；当视线接近自旋轴方向时，退化到本体 <strong>X</strong> 轴作为备用旋转轴。</li>
+              </ul>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">配对与导出</span>
+              <p>输出 <code>ISAR</code>、<code>Optical</code>、<code>Optical_ISAR_View</code>、<code>EchoSlice</code>，并可进一步整理为 <code>transforms_train.json</code> / <code>transforms_test.json</code>。在默认链路下，单模型通常得到约 120 组对齐样本，并采用 9:1 规则划分训练与测试。</p>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">任务与指标</span>
+              <p>光学到 ISAR 生成、姿态条件生成、sim-to-real 迁移与多波段泛化；可结合 FID、结构保真度、相位与多普勒一致性评估。</p>
+            </div>
+            <div class="special-card">
+              <strong>多波段设置</strong>
+              <ul class="mini-list">
+                <li><strong>C-band</strong>：5 GHz / 0.5 GHz</li>
+                <li><strong>X-band</strong>：10 GHz / 1 GHz</li>
+                <li><strong>Ku-band</strong>：16 GHz / 1.5 GHz</li>
+                <li>多波段扩展仅属于 Track 4，用于跨模态生成与跨频段泛化，不外推为全数据集统一设定。</li>
+              </ul>
+            </div>
+            <div class="meta-card sample-card">
+              <span class="meta-label">示例与状态</span>
+              <p>该 Track 已形成严格对齐的全视角跨模态导出链路，并保留继续接入 3DGS / NeRF 训练格式的接口。</p>
+              <a class="sample-link" href="assets/examples/track-gen/README.md">示例文件说明</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-row">
+          <div class="track-head">
+            <span class="track-index">Track 5 Perception</span>
+            <div class="track-title">
+              <h3>分类、检测与分割</h3>
+              <div class="en">Classification, Detection &amp; Segmentation</div>
+            </div>
+            <p class="track-summary">Track 5 基于真实轨道可视弧构造协议化感知数据。它的最小协议单元不是单个 TLE 文件，而是带有明确几何含义的 <code>(TLE, ArcIndex)</code> 组合；因此 SOC 与 EOC 的区别对应真实可复现的观测条件差异，而不是随机文件夹划分。该 Track 以分类为主，同时覆盖部件检测与分割，并用于评估跨观测条件泛化。</p>
+          </div>
+          <div class="track-deck track-deck-wide">
+            <div class="meta-card">
+              <span class="meta-label">数据形态</span>
+              <p>帧级 ISAR 图像、几何 sidecar、对应 Echo Slice，以及类别标签、BBox、Mask 等高层注释。</p>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">任务与指标</span>
+              <p>任务顺序为 分类 -> 部件检测 -> 分割；指标顺序为 Top-1 Acc -> mAP -> mIoU。</p>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">协议参数</span>
+              <p>当前主链以 X 波段为主，默认 <strong>Fc = 10 GHz</strong>、<strong>Bw = 1 GHz</strong>、<strong>PRF = 50 Hz</strong>、<strong>ImgSize = 512</strong>、可视俯仰角阈值 <strong>3°</strong>、<strong>StartT = 100</strong>、<strong>StepCoef = 0.25</strong>。</p>
+            </div>
+            <div class="meta-card sample-card">
+              <span class="meta-label">示例与状态</span>
+              <p>该 Track 已形成可复现的真实轨道协议链路。下面以 Juno 为例展示 SOC / EOC 的 train / test 外观差异。</p>
+              <a class="sample-link" href="assets/examples/track-perception/README.md">示例文件说明</a>
+            </div>
+            <div class="track-callout">
+              <strong>SOC / EOC 协议</strong>
+              <ul class="mini-list">
+                <li><strong>SOC</strong>：A 组 TLE 的 Arc03 作为 train，B 组 TLE 的 Arc03 作为 test；两组峰值俯仰角约 <strong>63.15° / 62.64°</strong>，平均方位角约 <strong>2.11° / 0.23°</strong>，对应 <strong>96 train + 94 test = 190</strong> 帧。</li>
+                <li><strong>EOC</strong>：A 组 TLE 的 Arc02 作为 train，B 组 TLE 的 Arc01 作为 test；两组峰值俯仰角约 <strong>80.99° / 16.53°</strong>，平均方位角约 <strong>163.57° / 147.77°</strong>，对应 <strong>67 train + 61 test = 128</strong> 帧。</li>
+                <li>两种协议都按指定 TLE 与指定弧段定义，分别对应“几何相近条件泛化”和“显著几何变化条件泛化”。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="protocol-copy">
+            <p>以下示例来自 <strong>Juno</strong> 的协议样本，可直观看到 SOC 与 EOC 在 train / test 之间的观测差异。SOC 中训练与测试的俯仰峰值都约为 <strong>63°</strong>，而 EOC 则从约 <strong>81°</strong> 外推到约 <strong>17°</strong>。</p>
+          </div>
+          <div class="protocol-grid" aria-label="Juno SOC and EOC examples">
+            <figure class="protocol-shot">
+              <img src="assets/examples/track-perception/Juno-SOC-train.png" alt="Juno SOC train sample" loading="lazy">
+              <figcaption>
+                <strong>SOC Train</strong>
+                <span>A Arc03，峰值俯仰约 63.15°，平均方位约 2.11°。</span>
+              </figcaption>
+            </figure>
+            <figure class="protocol-shot">
+              <img src="assets/examples/track-perception/Juno-SOC-test.png" alt="Juno SOC test sample" loading="lazy">
+              <figcaption>
+                <strong>SOC Test</strong>
+                <span>B Arc03，峰值俯仰约 62.64°，平均方位约 0.23°。</span>
+              </figcaption>
+            </figure>
+            <figure class="protocol-shot">
+              <img src="assets/examples/track-perception/Juno-EOC-train.png" alt="Juno EOC train sample" loading="lazy">
+              <figcaption>
+                <strong>EOC Train</strong>
+                <span>A Arc02，峰值俯仰约 80.99°，平均方位约 163.57°。</span>
+              </figcaption>
+            </figure>
+            <figure class="protocol-shot">
+              <img src="assets/examples/track-perception/Juno-EOC-test.png" alt="Juno EOC test sample" loading="lazy">
+              <figcaption>
+                <strong>EOC Test</strong>
+                <span>B Arc01，峰值俯仰约 16.53°，平均方位约 147.77°。</span>
+              </figcaption>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="taxonomy">
+      <div class="eyebrow">Taxonomy</div>
+      <h2>二维分类体系：Topology × Scale</h2>
+      <p>ASTRA-ISAR 不按“任务功能”划分类别，而采用“主导散射拓扑 + 电尺寸难度”的二维框架。这样定义的标签更接近 ISAR 图像中真正起作用的镜面反射、边缘绕射、二面角、腔体谐振、自遮挡与复杂微多普勒等物理因素。</p>
+      <div class="taxonomy-grid">
+        <article class="taxonomy-card">
+          <h3>拓扑类 A / B / C / D</h3>
+          <ul>
+            <li><strong>Class A</strong>：紧凑主体型，闭合凸包、展开部件少，适合作为紧凑体与小目标参考基线。</li>
+            <li><strong>Class B</strong>：非对称展开型，单侧翼面或偏置载荷主导，适合研究重心偏移与非对称微动。</li>
+            <li><strong>Class C</strong>：对称多翼展开型，双翼或多翼对称展开，是对称结构建模与 InISAR 重建的重要参考族。</li>
+            <li><strong>Class D</strong>：强载荷与复杂桁架型，大型天线、深腔与复杂组合体主导，是大目标难例上限库。</li>
+          </ul>
+        </article>
+        <article class="taxonomy-card">
+          <h3>尺度级 S / M / L</h3>
+          <ul>
+            <li><strong>S 级</strong>：最大跨度不超过 1.5 m，适合验证极小电尺寸目标与全波求解边界。</li>
+            <li><strong>M 级</strong>：最大跨度介于 1.5 m 到 10 m，适合研究中等尺寸目标的轮廓、二面角与部件结构。</li>
+            <li><strong>L 级</strong>：最大跨度超过 10 m，复杂自遮挡、多级衍射与强相干散斑显著，是大型目标核心挑战区间。</li>
+          </ul>
+        </article>
+      </div>
+      <div class="legend-row">
+        <span class="legend-chip">A: 紧凑主体型</span>
+        <span class="legend-chip">B: 非对称展开型</span>
+        <span class="legend-chip">C: 对称多翼展开型</span>
+        <span class="legend-chip">D: 强载荷与复杂桁架型</span>
+        <span class="legend-chip">S / M / L: 电尺寸与求解难度分级</span>
+      </div>
+    </section>
+
+    <section class="panel" id="gallery">
+      <div class="eyebrow">Target Browser</div>
+      <h2>目标可视化浏览</h2>
+      <p class="gallery-copy">按拓扑类、尺度级和关键词快速浏览当前目标池。卡片默认按 A-S -> A-M -> B-M -> B-L -> C-M -> C-L -> D-L 的顺序组织，并保留每个目标的核心物理 / 任务价值说明。</p>
+      <div class="filters">
+        <div class="filter-group" id="topology-filters" aria-label="Topology filters"></div>
+        <div class="filter-group" id="scale-filters" aria-label="Scale filters"></div>
+        <input class="search" id="search-input" type="search" placeholder="搜索目标名称，如 ISS、Landsat、嫦娥、Juno">
+      </div>
+      <div class="targets-grid" id="targets-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="references">
+      <div class="eyebrow">References</div>
+      <h2>参考文献 / 网页</h2>
+      <div class="refs-grid">
+        <article class="refs-card">
+          <h3>参考网页</h3>
+          <ul>
+            <li><a href="https://www.ucs.org/resources/satellite-database" target="_blank" rel="noreferrer">UCS Satellite Database</a></li>
+            <li><a href="https://database.eohandbook.com/" target="_blank" rel="noreferrer">CEOS / EO Handbook</a></li>
+            <li><a href="https://science.nasa.gov/3d-resources/" target="_blank" rel="noreferrer">NASA 3D Resources</a></li>
+            <li><a href="https://science.nasa.gov/mission/landsat-8/" target="_blank" rel="noreferrer">NASA Landsat 8 Mission Page</a></li>
+          </ul>
+        </article>
+        <article class="refs-card">
+          <h3>代表性文献</h3>
+          <ul>
+            <li><em>Inverse Synthetic Aperture Radar Imaging: A Historical Perspective and State-of-the-Art Survey</em></li>
+            <li><em>ISAR imaging of moving satellite based on GO-PO scattering model</em></li>
+            <li><em>Three-Dimensional Interferometric ISAR Imaging Algorithm Based on Cross Coherence Processing</em></li>
+            <li><em>A Cross-Modal Multi-Attitude Framework for the Generation of Space Target ISAR Images</em></li>
+            <li><em>SAIG: Semantic-Aware ISAR Generation via Component-Level Semantic Segmentation</em></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
 
   <script>
-    // Tab Navigation
-    function show(id){ 
-        document.querySelectorAll('section.card').forEach(s=>s.classList.remove('active')); 
-        document.getElementById(id).classList.add('active'); 
+    const targets = [
+      { id: "cubesat-1ru", name: "CubeSat (1 RU)", zh: "CubeSat 1RU", code: "A-S", topology: "A", scale: "S", image: "assets/targets/cubesat-1ru.webp", summary: "极小电尺寸基准，适合验证点散射与全波求解极限。" },
+      { id: "icecube-3u", name: "ICECube (3U)", zh: "ICECube 3U", code: "A-S", topology: "A", scale: "S", image: "assets/targets/icecube-3u.webp", summary: "细长紧凑体，适合研究边缘绕射与弱非对称散射。" },
+      { id: "acrimsat", name: "AcrimSAT", zh: "AcrimSAT", code: "A-M", topology: "A", scale: "M", image: "assets/targets/acrimsat.webp", summary: "紧凑多面体，适合验证多面棱边与非直角折面散射。" },
+      { id: "agena-target-vehicle", name: "Agena Target Vehicle", zh: "Agena 目标飞行器", code: "A-M", topology: "A", scale: "M", image: "assets/targets/agena-target-vehicle.webp", summary: "长圆柱平滑体，是规则光滑目标的典型参考样本。" },
+      { id: "kepler-space-telescope", name: "Kepler Space Telescope", zh: "开普勒空间望远镜", code: "A-M", topology: "A", scale: "M", image: "assets/targets/kepler-space-telescope.webp", summary: "紧凑主体中包含深开口空腔，适合研究腔体拖尾与伪散射点。" },
+      { id: "earth-observing-1", name: "Earth Observing-1 (EO-1)", zh: "EO-1", code: "B-M", topology: "B", scale: "M", image: "assets/targets/earth-observing-1.webp", summary: "单侧展开的典型样本，适合研究重心偏移与非对称微动。" },
+      { id: "lunar-reconnaissance-orbiter", name: "Lunar Reconnaissance Orbiter", zh: "月球勘测轨道飞行器", code: "B-M", topology: "B", scale: "M", image: "assets/targets/lunar-reconnaissance-orbiter.webp", summary: "单翼加偏置天线组合，适合姿态估计与复杂微动分析。" },
+      { id: "fengyun-3", name: "Fengyun-3", zh: "风云 3 号", code: "B-M", topology: "B", scale: "M", image: "assets/targets/fengyun-3.webp", summary: "偏置长翼极轨平台，适合非对称遥感目标识别与成像分析。" },
+      { id: "landsat-8", name: "Landsat 8", zh: "Landsat 8", code: "B-M", topology: "B", scale: "M", image: "assets/targets/landsat-8.webp", summary: "成熟的单翼对地观测平台，是 B 类的稳健基准样本。" },
+      { id: "aqua", name: "Aqua", zh: "Aqua", code: "B-L", topology: "B", scale: "L", image: "assets/targets/aqua.webp", summary: "超长单侧翼大型平台，适合强 MTRC 与旋转补偿研究。" },
+      { id: "cloudsat", name: "CloudSat", zh: "CloudSat", code: "C-M", topology: "C", scale: "M", image: "assets/targets/cloudsat.webp", summary: "对称构型叠加显著载荷，是 C 类中的边界型代表目标。" },
+      { id: "chang-e-1", name: "Chang'e 1", zh: "嫦娥一号", code: "C-L", topology: "C", scale: "L", image: "assets/targets/chang-e-1.webp", summary: "经典双翼深空器，是对称大目标 InISAR 重建的模板样本。" },
+      { id: "tianlian-1", name: "TianLian-1", zh: "天链一号", code: "C-L", topology: "C", scale: "L", image: "assets/targets/tianlian-1.webp", summary: "超大双翼与网状抛物面天线并存，适合高频结构联合散射研究。" },
+      { id: "shenzhou-12", name: "Shenzhou 12", zh: "神舟 12 号", code: "C-L", topology: "C", scale: "L", image: "assets/targets/shenzhou-12.webp", summary: "双翼加多舱串联结构，适合部件检测与分割任务。" },
+      { id: "dawn", name: "Dawn", zh: "Dawn", code: "C-L", topology: "C", scale: "L", image: "assets/targets/dawn.webp", summary: "极端高宽比双翼，适合测试横向能量扩散与边缘绕射处理。" },
+      { id: "tianhe-tianzhou", name: "Tianhe-Tianzhou", zh: "天和天舟组合体", code: "D-L", topology: "D", scale: "L", image: "assets/targets/tianhe-tianzhou.webp", summary: "大型对接复合体，适合研究自遮挡、多次弹跳与组合体成像。" },
+      { id: "mars-reconnaissance-orbiter", name: "Mars Reconnaissance Orbiter", zh: "火星勘测轨道飞行器", code: "D-L", topology: "D", scale: "L", image: "assets/targets/mars-reconnaissance-orbiter.webp", summary: "高增益天线与复杂不共面结构显著，是复杂载荷主导型样本。" },
+      { id: "juno", name: "Juno", zh: "朱诺号", code: "D-L", topology: "D", scale: "L", image: "assets/targets/juno.webp", summary: "Y 型三翼与自旋动力学并存，是非平稳微多普勒难例。" },
+      { id: "tianhe-tianzhou-shenzhou", name: "Tianhe-Tianzhou-Shenzhou", zh: "天和天舟神舟组合体", code: "D-L", topology: "D", scale: "L", image: "assets/targets/tianhe-tianzhou-shenzhou.webp", summary: "多模块级联结构形成复杂二面角与三面角干涉网络。" },
+      { id: "iss", name: "ISS", zh: "国际空间站", code: "D-L", topology: "D", scale: "L", image: "assets/targets/iss.webp", summary: "百米级复杂桁架上限样本，是大目标建模与识别的终极难例。" }
+    ];
+
+    const topologyMeta = { All: "全部拓扑", A: "A 类", B: "B 类", C: "C 类", D: "D 类" };
+    const scaleMeta = { All: "全部尺度", S: "S 级", M: "M 级", L: "L 级" };
+
+    let activeTopology = "All";
+    let activeScale = "All";
+    let searchTerm = "";
+
+    function renderButtons(containerId, options, activeValue, onSelect) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      Object.entries(options).forEach(([value, label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "filter-btn" + (value === activeValue ? " active" : "");
+        button.textContent = label;
+        button.addEventListener("click", () => onSelect(value));
+        container.appendChild(button);
+      });
     }
 
-    // Lightbox Logic
-    document.addEventListener('DOMContentLoaded', () => {
-        const lightbox = document.getElementById('lightbox');
-        if (lightbox) {
-            const lightboxImg = lightbox.querySelector('img');
-            const publicationImages = document.querySelectorAll('.publication-image');
+    function renderTargets() {
+      const grid = document.getElementById("targets-grid");
+      const keyword = searchTerm.trim().toLowerCase();
+      const filtered = targets.filter((target) => {
+        const topologyMatch = activeTopology === "All" || target.topology === activeTopology;
+        const scaleMatch = activeScale === "All" || target.scale === activeScale;
+        const textMatch = !keyword || [target.name, target.zh, target.code].join(" ").toLowerCase().includes(keyword);
+        return topologyMatch && scaleMatch && textMatch;
+      });
 
-            publicationImages.forEach(imageContainer => {
-                imageContainer.addEventListener('click', () => {
-                    const originalImg = imageContainer.querySelector('img');
-                    const imgSrc = originalImg.getAttribute('src');
-                    
-                    lightboxImg.setAttribute('src', imgSrc);
-                    lightbox.classList.add('active');
-                    
-                    setTimeout(() => {
-                        lightbox.style.opacity = '1';
-                        lightboxImg.style.transform = 'scale(1)';
-                    }, 20);
-                });
-            });
+      grid.innerHTML = "";
 
-            lightbox.addEventListener('click', () => {
-                lightbox.style.opacity = '0';
-                lightboxImg.style.transform = 'scale(0.8)';
-                setTimeout(() => {
-                    lightbox.classList.remove('active');
-                }, 300);
-            });
-        }
-        
-        // Add Enter Key Support for Lock Input
-        const inputField = document.getElementById('directorInput');
-        if(inputField){
-            inputField.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    checkAnswer();
-                }
-            });
-            // Remove shake class on input
-            inputField.addEventListener('input', function(){
-                this.classList.remove('shake');
-            });
-        }
+      filtered.forEach((target) => {
+        const card = document.createElement("article");
+        card.className = "target-card";
+        card.innerHTML = `
+          <div class="target-image">
+            <img src="${target.image}" alt="${target.name}">
+          </div>
+          <div class="target-body">
+            <span class="target-code">${target.code}</span>
+            <div>
+              <strong>${target.zh}</strong>
+              <span>${target.name}</span>
+            </div>
+            <p>${target.summary}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      if (!filtered.length) {
+        const empty = document.createElement("article");
+        empty.className = "target-card";
+        empty.innerHTML = `
+          <div class="target-body">
+            <span class="target-code">No Result</span>
+            <div>
+              <strong>无匹配目标</strong>
+              <span>请调整筛选条件或搜索关键词</span>
+            </div>
+            <p>当前筛选条件下没有匹配项。</p>
+          </div>
+        `;
+        grid.appendChild(empty);
+      }
+    }
+
+    function renderFilters() {
+      renderButtons("topology-filters", topologyMeta, activeTopology, (value) => {
+        activeTopology = value;
+        renderFilters();
+        renderTargets();
+      });
+
+      renderButtons("scale-filters", scaleMeta, activeScale, (value) => {
+        activeScale = value;
+        renderFilters();
+        renderTargets();
+      });
+    }
+
+    document.getElementById("search-input").addEventListener("input", (event) => {
+      searchTerm = event.target.value;
+      renderTargets();
     });
 
-    // --- LOCK SYSTEM LOGIC ---
-    function checkAnswer() {
-        const input = document.getElementById('directorInput');
-        const overlay = document.getElementById('filmLock');
-        const content = document.getElementById('filmContent');
-        const answer = input.value.trim();
-
-        // 验证逻辑：基耶斯洛夫斯基
-        if (answer === "基耶斯洛夫斯基") {
-            // Success: Unlock
-            overlay.classList.add('hidden'); // 渐隐遮罩
-            content.classList.remove('locked'); // 移除模糊和禁止点击
-        } else {
-            // Error: Shake Animation
-            input.classList.add('shake');
-            
-            // 重置动画以便下次触发
-            setTimeout(() => {
-                input.classList.remove('shake');
-            }, 500);
-        }
-    }
+    renderFilters();
+    renderTargets();
   </script>
 </body>
 </html>

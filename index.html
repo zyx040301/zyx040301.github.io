@@ -1222,7 +1222,7 @@
             </div>
             <div class="hero-intro">
               <p><strong>ASTRA-ISAR</strong>（<em>A Space-Target Radar Benchmark for Imaging, Generation, and Perception</em>）面向空间目标雷达感知与成像研究，中文标准名为“空间目标雷达成像、生成与感知基准”。数据集围绕统一的物理观测链组织 LOS 几何、复数回波、ISAR 图像、对齐参考视图、几何字段与语义标注，目标是在同一观测逻辑下把多层级数据整理为同源、可追溯、便于复现实验的数据基座。</p>
-              <p>当前版本为预发布说明页。ASTRA-ISAR 以上游两类发布数据为基础：一类给出全视角、多波段、严格对齐的观测发布结果，另一类给出由真实轨道几何驱动的协议化地基 ISAR 观测。观测链覆盖从回波层到高层感知，但当前对外基准组织为 <strong>Enhance</strong>、<strong>Gen</strong>、<strong>Perception</strong> 与 <strong>Geo</strong> 四个 Track，并通过统一的 <strong>Topology × Scale</strong> 目标体系保持任务间的一致性。</p>
+              <p>当前版本为预发布说明页。ASTRA-ISAR 以上游两类发布数据为基础：一类给出全视角、多波段、严格对齐的观测发布结果，另一类给出由真实轨道几何驱动的协议化地基 ISAR 观测。观测链覆盖从回波层到高层感知，但当前对外基准组织为 <strong>Imaging</strong>、<strong>Gen</strong>、<strong>Perception</strong> 与 <strong>Geo</strong> 四个 Track，并通过统一的 <strong>Topology × Scale</strong> 目标体系保持任务间的一致性。</p>
             </div>
           </div>
           <div class="hero-why">
@@ -1252,7 +1252,7 @@
             <div class="dataset-stats"><span class="stat-chip">20 类目标</span><span class="stat-chip">3 波段</span><span class="stat-chip">每组 120 视角</span><span class="stat-chip">总计 7200 视角样本</span><span class="stat-chip">严格对齐发布</span></div>
             <div class="dataset-protocols">
               <div class="dataset-protocol-row"><strong>观测组织</strong><span>同一目标在 C / X / Ku 三个波段下共享同一套全视角采样与统一视角编号。</span></div>
-              <div class="dataset-protocol-row"><strong>任务支撑</strong><span>为 Enhance 中以成像结果为输入的恢复任务、Gen 的跨模态生成与 Geo 的连续几何建模提供共同上游基础。</span></div>
+              <div class="dataset-protocol-row"><strong>任务支撑</strong><span>支撑 Imaging 的多波段稀疏孔径成像验证、Gen 的跨模态生成与 Geo 的连续几何建模。</span></div>
             </div>
             <p>在固定对象与固定视角条件下，C 波段更偏向整体散射组织与主导结构，X 波段更适合表征过渡结构与中尺度差异，Ku 波段更敏感于细节、细长部件与局部高亮散射，因此可以更稳定地比较频段间的表征差异。</p>
           </article>
@@ -1263,34 +1263,35 @@
               <div class="dataset-protocol-row"><strong>几何来源</strong><span>NORAD 48274 / Tiangong (Tianhe) 真实 TLE</span></div>
               <div class="dataset-protocol-row"><strong>标准工况（SOC）</strong><span>训练与测试观测几何更接近，对应更稳定的标准条件；训练 / 测试规模为 1340 / 1224。</span></div>
               <div class="dataset-protocol-row"><strong>扩展工况（EOC）</strong><span>训练与测试观测几何差异更明显，对应更具挑战性的扩展条件；训练 / 测试规模为 1920 / 1880。</span></div>
+              <div class="dataset-protocol-row"><strong>任务支撑</strong><span>支撑 Imaging 的真实轨道稀疏孔径成像与图像增强，以及 Perception 的 SOC / EOC 识别协议。</span></div>
             </div>
-            <p>该发布数据构成 Enhance 中受限观测恢复与 Perception 中协议化识别的共同基础。</p>
+            <p>该发布数据强调真实轨道观测条件下的协议化训练与测试入口。</p>
           </article>
         </div>
-        <div class="dataset-bridge"><strong>发布层与基准层的对应关系</strong><p>两类发布数据共享统一目标池，但承担的信息层级不同：发布层强调观测来源、组织方式与协议语义，基准层则在此基础上定义具体任务、数据入口与评测边界。</p></div>`;
+        <div class="dataset-bridge"><strong>发布层与基准层的对应关系</strong><p>两类发布数据共享统一目标池，但承担的信息层级不同：全视角多波段对齐观测集主要服务 Imaging、Gen 与 Geo，天和真实轨道地基 ISAR 协议观测集主要服务 Imaging 与 Perception。</p></div>`;
     }
     if (tracks) {
       tracks.innerHTML = `
         <div class="eyebrow">Four Tracks</div>
         <h2>四个 Track</h2>
-        <p class="section-intro">四个 Track 建立在统一目标池、统一观测逻辑与统一分类体系之上，分别服务于恢复、跨模态生成、识别与语义分割、连续几何重建等不同研究层级。以下内容集中说明任务目标、协议结构与示意样例。</p>
+        <p class="section-intro">四个 Track 建立在统一目标池、统一观测逻辑与统一分类体系之上，分别服务于 ISAR 成像、跨模态生成、识别与语义分割、连续几何重建等不同研究层级。以下内容集中说明任务目标、协议结构与示意样例。</p>
         <div class="track-list">
           <article class="track-row">
             <div class="track-head">
-              <span class="track-index">Track 1 Enhance</span>
-              <div class="track-title"><h3>图像域退化与物理成像恢复</h3><div class="en">Image-domain Restoration &amp; Physics-driven Imaging Recovery</div></div>
-              <p class="track-summary">Enhance 包含两类恢复任务：一类以已退化的雷达成像结果为输入，关注结构细节与有效分辨率恢复；另一类以观测信息不完整条件下的成像结果为输入，关注在观测受限时保持主体结构、散射组织与整体可判读性。两类任务共享统一目标池，但研究假设与问题边界不同。</p>
+              <span class="track-index">Track 1 Imaging</span>
+              <div class="track-title"><h3>稀疏孔径成像与图像增强</h3><div class="en">Sparse-Aperture ISAR Imaging &amp; Image Enhancement</div></div>
+              <p class="track-summary">Imaging 面向低层 ISAR 图像形成与质量提升问题，包含两类任务单元：其一从不完整孔径观测出发，形成接近完整孔径条件的 ISAR 成像结果；其二从已退化的 ISAR 图像出发，评估超分辨、去模糊与图像增强方法对目标结构和散射纹理的恢复能力。</p>
             </div>
             <div class="track-deck track-deck-wide">
-              <div class="meta-card"><strong class="card-heading numbered"><span class="order-badge">01</span>退化图像恢复</strong><p>第一类任务从已经退化的雷达成像结果出发，关注目标轮廓、结构层次和局部细节的恢复。其重点在于恢复成像结果本身的清晰度与结构保真度，并检验方法对空间目标散射纹理与形态差异的适应能力。</p></div>
-              <div class="meta-card"><strong class="card-heading numbered"><span class="order-badge">02</span>受限观测恢复</strong><p>第二类任务把问题前移到观测条件受限的成像场景，输入来自观测信息不完整条件下的成像结果。其重点在于观测约束明显增强时，模型能否仍然维持主体结构、聚焦稳定性与整体判读质量。</p></div>
-              <div class="track-callout"><strong>研究边界</strong><p>Enhance 将“已退化成像结果的恢复”与“受限观测条件下的恢复”明确区分。前者主要考察成像结果层面的结构修复能力，后者则更强调在观测条件受限时保持目标结构与散射组织的能力。</p></div>
-              <div class="meta-card meta-card-wide"><strong class="card-heading">任务示意</strong><p>下方样例用于展示受限观测恢复任务的输入与结果关系。三组示意对应不同稀疏率，上半部分为任务输入，下半部分为示例恢复结果，用于帮助读者理解任务难度与视觉差异，而不承担方法对比或结论展示的作用。</p></div>
+              <div class="meta-card"><strong class="card-heading numbered"><span class="order-badge">01</span>稀疏孔径 ISAR 成像</strong><p>该任务从不完整孔径观测或距离向压缩表示出发，形成接近完整孔径条件的 ISAR 成像结果。它关注的是观测缺失条件下的成像形成能力，而不是普通图像增强。</p></div>
+              <div class="meta-card"><strong class="card-heading numbered"><span class="order-badge">02</span>图像增强与超分辨</strong><p>该任务从已退化的 ISAR 图像出发，评估超分辨、去模糊与图像增强方法对目标结构、散射纹理和有效分辨率的恢复能力。它属于图像域质量提升任务。</p></div>
+              <div class="track-callout"><strong>任务边界</strong><p>稀疏孔径 ISAR 成像关注观测缺失条件下的成像形成能力；图像增强与超分辨关注已有图像退化后的结构与分辨率恢复。二者同属低层 ISAR 图像形成与质量提升问题，但入口、物理含义和评价口径不同。</p></div>
+              <div class="meta-card meta-card-wide"><strong class="card-heading">任务示意</strong><p>下方样例用于展示稀疏孔径 ISAR 成像任务的输入与成像结果关系。三组示意对应不同稀疏率，上半部分为任务输入，下半部分为示例成像结果，用于帮助读者理解任务难度与视觉差异，而不承担方法对比或结论展示的作用。</p></div>
             </div>
-            <div class="showcase-grid" aria-label="Enhance sparse-aperture examples">
-              <article class="showcase-card"><h4>稀疏率 r = 0.125</h4><div class="preview-stack"><div class="preview-panel hrrp"><span>任务输入</span><img src="assets/examples/track-enhance/input_hrrp_r0125.png" alt="Enhance sparse input at r0125" loading="lazy"></div><div class="preview-panel square"><span>示例恢复结果</span><img src="assets/examples/track-enhance/result_native_r0125.png" alt="Enhance restoration example at r0125" loading="lazy"></div></div><p>最高稀疏条件，对应最强观测缺失。</p></article>
-              <article class="showcase-card"><h4>稀疏率 r = 0.25</h4><div class="preview-stack"><div class="preview-panel hrrp"><span>任务输入</span><img src="assets/examples/track-enhance/input_hrrp_r025.png" alt="Enhance sparse input at r025" loading="lazy"></div><div class="preview-panel square"><span>示例恢复结果</span><img src="assets/examples/track-enhance/result_native_r025.png" alt="Enhance restoration example at r025" loading="lazy"></div></div><p>中等偏强稀疏条件，适合比较主体结构恢复稳定性。</p></article>
-              <article class="showcase-card"><h4>稀疏率 r = 0.50</h4><div class="preview-stack"><div class="preview-panel hrrp"><span>任务输入</span><img src="assets/examples/track-enhance/input_hrrp_r50.png" alt="Enhance sparse input at r50" loading="lazy"></div><div class="preview-panel square"><span>示例恢复结果</span><img src="assets/examples/track-enhance/result_native_r50.png" alt="Enhance restoration example at r50" loading="lazy"></div></div><p>相对较低稀疏条件，更适合观察细节与边缘保持。</p></article>
+            <div class="showcase-grid" aria-label="Imaging sparse-aperture examples">
+              <article class="showcase-card"><h4>稀疏率 r = 0.50</h4><div class="preview-stack"><div class="preview-panel hrrp"><span>任务输入</span><img src="assets/examples/track-enhance/input_hrrp_r50.png" alt="Imaging sparse input at r50" loading="lazy"></div><div class="preview-panel square"><span>示例成像结果</span><img src="assets/examples/track-enhance/result_native_r50.png" alt="Imaging result example at r50" loading="lazy"></div></div><p>相对较低稀疏条件，更适合观察细节与边缘保持。</p></article>
+              <article class="showcase-card"><h4>稀疏率 r = 0.25</h4><div class="preview-stack"><div class="preview-panel hrrp"><span>任务输入</span><img src="assets/examples/track-enhance/input_hrrp_r025.png" alt="Imaging sparse input at r025" loading="lazy"></div><div class="preview-panel square"><span>示例成像结果</span><img src="assets/examples/track-enhance/result_native_r025.png" alt="Imaging result example at r025" loading="lazy"></div></div><p>中等偏强稀疏条件，适合比较主体结构恢复稳定性。</p></article>
+              <article class="showcase-card"><h4>稀疏率 r = 0.125</h4><div class="preview-stack"><div class="preview-panel hrrp"><span>任务输入</span><img src="assets/examples/track-enhance/input_hrrp_r0125.png" alt="Imaging sparse input at r0125" loading="lazy"></div><div class="preview-panel square"><span>示例成像结果</span><img src="assets/examples/track-enhance/result_native_r0125.png" alt="Imaging result example at r0125" loading="lazy"></div></div><p>最高稀疏条件，对应最强观测缺失。</p></article>
             </div>
           </article>
           <article class="track-row">
@@ -1378,7 +1379,7 @@
         <div class="refs-grid">
           <article class="refs-card"><h3>参考网页</h3><ul><li><a href="https://www.ucs.org/resources/satellite-database" target="_blank" rel="noreferrer">UCS Satellite Database</a></li><li><a href="https://science.nasa.gov/3d-resources/" target="_blank" rel="noreferrer">NASA 3D Resources</a></li></ul></article>
           <article class="refs-card"><h3>三维重建</h3><ul><li><a href="https://ieeexplore.ieee.org/document/10190736" target="_blank" rel="noreferrer"><em>RaNeRF: Neural 3-D Reconstruction of Space Targets From ISAR Image Sequences</em></a></li></ul></article>
-          <article class="refs-card"><h3>恢复与成像</h3><ul><li><a href="https://ieeexplore.ieee.org/document/10028343" target="_blank" rel="noreferrer"><em>Deep Unfolding of the Half-Quadratic Splitting Algorithm for ISAR Image Super-resolution</em></a></li><li><a href="https://ieeexplore.ieee.org/document/10335726" target="_blank" rel="noreferrer"><em>An Integrated Network for SA-ISAR Image Processing With Adaptive Denoising and Super-Resolution Modules</em></a></li><li><a href="https://ieeexplore.ieee.org/document/11202588" target="_blank" rel="noreferrer"><em>A Learning-Aided Unsupervised Method for Sparse Aperture ISAR Imaging and Autofocusing</em></a></li><li><a href="https://radars.ac.cn/cn/article/doi/10.12000/JR23121" target="_blank" rel="noreferrer"><em>A metalearning-based sparse aperture ISAR imaging method</em></a></li></ul></article>
+          <article class="refs-card"><h3>成像与增强</h3><ul><li><a href="https://ieeexplore.ieee.org/document/10028343" target="_blank" rel="noreferrer"><em>Deep Unfolding of the Half-Quadratic Splitting Algorithm for ISAR Image Super-resolution</em></a></li><li><a href="https://ieeexplore.ieee.org/document/10335726" target="_blank" rel="noreferrer"><em>An Integrated Network for SA-ISAR Image Processing With Adaptive Denoising and Super-Resolution Modules</em></a></li><li><a href="https://ieeexplore.ieee.org/document/11202588" target="_blank" rel="noreferrer"><em>A Learning-Aided Unsupervised Method for Sparse Aperture ISAR Imaging and Autofocusing</em></a></li><li><a href="https://radars.ac.cn/cn/article/doi/10.12000/JR23121" target="_blank" rel="noreferrer"><em>A metalearning-based sparse aperture ISAR imaging method</em></a></li></ul></article>
           <article class="refs-card"><h3>跨模态生成</h3><ul><li><a href="https://ieeexplore.ieee.org/document/10261220" target="_blank" rel="noreferrer"><em>Meta-Learning Based Domain Prior With Application to Optical-ISAR Image Translation</em></a></li><li><a href="https://ieeexplore.ieee.org/abstract/document/10888516" target="_blank" rel="noreferrer"><em>A Cross-Modal Multi-Attitude Framework for the Generation of Space Target ISAR Images</em></a></li><li><a href="https://ieeexplore.ieee.org/document/10975048" target="_blank" rel="noreferrer"><em>SAIG: Semantic-Aware ISAR Generation via Component-Level Semantic Segmentation</em></a></li></ul></article>
         </div>`;
     }

@@ -731,6 +731,17 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
+    .showcase-grid.geo-showcase {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .geo-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
     .showcase-card {
       overflow: hidden;
       border-radius: var(--radius-md);
@@ -790,6 +801,18 @@
 
     .preview-panel.square img {
       aspect-ratio: 1 / 1;
+    }
+
+    .preview-panel.geo-wide img {
+      aspect-ratio: 3.4 / 1;
+      background: #fbfaf2;
+      padding: 8px;
+    }
+
+    .preview-panel.geo-square img {
+      aspect-ratio: 1 / 1;
+      background: #060203;
+      padding: 10px;
     }
 
     .taxonomy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 18px; }
@@ -1336,13 +1359,19 @@
             <div class="track-head">
               <span class="track-index">Track 4 Geo</span>
               <div class="track-title"><h3>连续几何与三维散射重建</h3><div class="en">Continuous Geometry &amp; 3D Scatter Reconstruction</div></div>
-              <p class="track-summary">Geo 面向连续多视角几何恢复与三维散射建模，其基本研究对象是同一目标在连续视角序列中的成像变化及其与几何结构、散射分布之间的对应关系，研究重点落在序列层的几何一致性而非单帧判读。</p>
+              <p class="track-summary">Geo 面向同一空间目标在连续观测弧段中的三维几何与散射表示重建。它以多帧 ISAR 序列及其观测几何为基础，分别在 SOC 与 EOC 条件下考察重建结果能否保持合理结构，并在未见观测弧段中解释对应的 ISAR 幅度图。</p>
             </div>
             <div class="track-deck track-deck-wide">
-              <div class="meta-card"><strong class="card-heading">任务定义</strong><p>该 Track 关注连续视角下的几何表达、多视图一致性和三维散射恢复。研究者既可以把它视作面向多视图学习的成像问题，也可以把它视作从雷达图像反推目标几何结构与散射分布的基础平台。</p></div>
-              <div class="special-card"><strong>几何约束来源</strong><ul class="mini-list"><li>连续视角序列为几何恢复提供跨帧约束，不宜被压缩为彼此独立的静态图像。</li><li>同一目标在不同视图下的外观变化，可用于推断几何结构与散射分布之间的对应关系。</li><li>该 Track 与 Gen 共享统一目标池，可支持从跨模态对齐到几何重建的联合研究。</li></ul></div>
-              <div class="track-callout"><strong>研究对象</strong><p>Geo 以同一目标在连续视角序列中的成像变化为基本研究对象，关注模型如何同时解释几何结构、散射分布与成像结果之间的一致关系，而非只在某一帧上做局部拟合。</p></div>
-              <div class="meta-card meta-card-wide"><strong class="card-heading">评测关注点</strong><p>相比单帧图像任务，Geo 更强调跨视图一致性、几何误差、渲染质量和散射结构保持等整体能力。它关注的是模型如何解释“同一目标在连续视角中为何这样变化”，并据此支撑三维建模与渲染研究。</p></div>
+              <div class="meta-card"><strong class="card-heading">任务定义</strong><p>给定同一目标在训练观测弧段中的多帧 ISAR 序列与相应观测几何，任务要求恢复目标的三维几何或三维散射表示，并在独立测试弧段上验证几何正确性与成像一致性。输出可表现为点云、网格、体表示或可渲染的散射场，但应能够转化为统一的三维表示进行比较。</p></div>
+              <div class="special-card"><strong>几何约束来源</strong><ul class="mini-list"><li>连续弧段中的相邻帧并非独立样本，其变化由观测几何、目标姿态和成像平面共同决定。</li><li>SOC 用于检验标准观测条件下的稳定重建能力，EOC 用于检验更显著视角变化下的泛化能力。</li><li>多视角下的散射中心迁移、遮挡显隐和展开结构投影，为三维结构恢复提供跨帧约束。</li></ul></div>
+              <div class="track-callout"><strong>研究对象</strong><p>Geo 的研究对象不是单帧图像分类或单视角生成，而是同一目标在连续观测过程中的结构、散射与成像对应关系。该 Track 重点考察三维表示是否能够稳定描述主体轮廓、展开部件、细长结构和高能散射区域，并在标准与扩展观测条件下保持可解释的几何一致性。</p></div>
+              <div class="meta-card meta-card-wide"><strong class="card-heading">评测关注点</strong><p>该 Track 应同时关注两类证据：一是三维几何本身的准确性、完整性和细长部件保持；二是基于重建表示在未见观测弧段上形成的 ISAR 幅度图是否与参考观测一致。页面仅展示定性样例，不呈现具体方法名或数值指标。</p></div>
+            </div>
+            <div class="showcase-grid geo-showcase" aria-label="Geo SOC and EOC reconstruction examples">
+              <article class="showcase-card"><h4>SOC 成像一致性</h4><div class="geo-pair"><div class="preview-panel geo-square"><span>GT 幅度图</span><img src="assets/examples/track-geo/geo_soc_juno_gt.png" alt="Geo SOC ground-truth ISAR amplitude image" loading="lazy"></div><div class="preview-panel geo-square"><span>重建幅度图</span><img src="assets/examples/track-geo/geo_soc_juno_recon.png" alt="Geo SOC reconstructed ISAR amplitude image" loading="lazy"></div></div><p>标准工况下的幅度图对照，用于观察重建表示对测试弧段成像形态的解释能力。</p></article>
+              <article class="showcase-card"><h4>EOC 成像一致性</h4><div class="geo-pair"><div class="preview-panel geo-square"><span>GT 幅度图</span><img src="assets/examples/track-geo/geo_eoc_juno_gt.png" alt="Geo EOC ground-truth ISAR amplitude image" loading="lazy"></div><div class="preview-panel geo-square"><span>重建幅度图</span><img src="assets/examples/track-geo/geo_eoc_juno_recon.png" alt="Geo EOC reconstructed ISAR amplitude image" loading="lazy"></div></div><p>扩展工况下的幅度图对照，用于观察更显著视角变化与遮挡变化带来的成像差异。</p></article>
+              <article class="showcase-card"><h4>SOC 三维散射结构</h4><div class="preview-panel geo-wide"><span>测试弧段对应点云</span><img src="assets/examples/track-geo/geo_soc_juno_point.png" alt="Geo SOC 3D scatter point cloud example" loading="lazy"></div><p>点云三视角展示用于观察主体、展开结构与散射分布在标准工况下的空间组织。</p></article>
+              <article class="showcase-card"><h4>EOC 三维散射结构</h4><div class="preview-panel geo-wide"><span>测试弧段对应点云</span><img src="assets/examples/track-geo/geo_eoc_juno_point.png" alt="Geo EOC 3D scatter point cloud example" loading="lazy"></div><p>与上方 EOC 幅度图对应，用于观察扩展工况下三维结构与散射分布的稳定性。</p></article>
             </div>
           </article>
         </div>`;
